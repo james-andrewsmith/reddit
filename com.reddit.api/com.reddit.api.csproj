@@ -45,12 +45,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Comment.cs" />
+    <Compile Include="CommentListing.cs" />
+    <Compile Include="CommentSortBy.cs" />
     <Compile Include="Extension.cs" />
     <Compile Include="FrontPage.cs" />
     <Compile Include="Post.cs" />
     <Compile Include="PostListing.cs" />
     <Compile Include="Request.cs" />
     <Compile Include="RequestHash.cs" />
+    <Compile Include="Search.cs" />
+    <Compile Include="SearchListing.cs" />
+    <Compile Include="SearchSortBy.cs" />
     <Compile Include="Session.cs" />
     <Compile Include="Sub.cs" />
     <Compile Include="SubSortBy.cs" />
@@ -58,6 +63,7 @@
     <Compile Include="ThingType.cs" />
     <Compile Include="User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UserSortBy.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

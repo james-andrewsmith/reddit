@@ -255,6 +255,11 @@ namespace com.reddit.api
 
         #region // Actions //
 
+        public static PostListing GetRelated(Session session, Post post)
+        {
+
+        }
+
         public static void Submit(Session session, Post post)
         {
             throw new NotImplementedException();

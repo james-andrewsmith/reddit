@@ -64,15 +64,66 @@ namespace com.reddit.api.tests
         [TestMethod]
         public void Hide_UnHide()
         {
+            // login
+            var session = User.Login(Configuration.GetKey("username"), Configuration.GetKey("password"));
+
+            // get a popular sub
+            var list = Sub.GetListing(session, "pics");
+            session.ModHash = list.ModHash;
+
+            // no modhash
+            if (string.IsNullOrEmpty(list.ModHash))
+                Assert.Fail();
+
+            // no posts
+            if (list.Count == 0)
+                Assert.Fail();
+
+            // find the first story with no votes either way
+            var id = string.Empty;
+            foreach (var post in list)
+            {
+                id = post.ID;
+                break;
+            }
+
+            Post.Hide(session, id);
+
+            Post.UnHide(session, id);
 
         }
 
         [TestMethod]
         public void Save_UnSave()
         {
-            
-            
+            // login
+            var session = User.Login(Configuration.GetKey("username"), Configuration.GetKey("password"));
 
+            // get a popular sub
+            var list = Sub.GetListing(session, "pics");
+            session.ModHash = list.ModHash;
+
+            // no modhash
+            if (string.IsNullOrEmpty(list.ModHash))
+                Assert.Fail();
+
+            // no posts
+            if (list.Count == 0)
+                Assert.Fail();
+
+            // find the first story with no votes either way
+            var id = string.Empty;
+            foreach (var post in list)
+            {
+                id = post.ID;
+                break;
+            }
+
+
+            Post.Save(session, id);
+
+            Post.UnSave(session, id);
+           
         }
 
         // Not testing this because we don't want to report anyone!

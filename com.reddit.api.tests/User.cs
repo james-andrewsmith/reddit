@@ -24,5 +24,21 @@ namespace com.reddit.api.tests
             Assert.IsFalse(string.IsNullOrEmpty(session.ModHash));
             Assert.IsFalse(string.IsNullOrEmpty(session.Cookie));
         }
+
+        [TestMethod]
+        public void ListSaved()
+        {
+            // login using regular creds
+            var session = User.Login(Configuration.GetKey("username"), Configuration.GetKey("password"));
+
+            var posts = User.GetSaved(session);
+            Assert.IsTrue(posts.Count > 0);
+        }
+
+        [TestMethod]
+        public void ListComments()
+        {
+
+        }
     }
 }
