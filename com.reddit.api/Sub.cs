@@ -135,6 +135,127 @@ namespace com.reddit.api
             return list;
         }
 
+        private const int Limit = 100;
+
+        public static PostListing GetListing(Session session, string sub)
+        {
+            return GetListing(session, sub, SubSortBy.Hot, string.Empty, string.Empty);
+        }
+
+        public static PostListing GetListing(Session session, string sub, SubSortBy sort)
+        {
+            return GetListing(session, sub, sort, string.Empty, string.Empty);
+        }
+
+        public static PostListing GetListing(Session session, string sub, string after)
+        {
+            return GetListing(session, sub, SubSortBy.Hot, after, string.Empty);
+        }
+
+        public static PostListing GetListing(Session session, string sub, string after, string before)
+        {
+            return GetListing(session, sub, SubSortBy.Hot, after, before);
+        }
+
+        public static PostListing GetListing(Session session, string sub, SubSortBy sort, string after)
+        {
+            return GetListing(session, sub, sort, after, string.Empty);
+        }
+
+        public static PostListing GetListing(Session session, string sub, SubSortBy sort, string after, string before)
+        {
+            var url = "http://www.reddit.com/r/" + sub + "/";
+            switch (sort)
+            {
+                case SubSortBy.Hot:
+                    url += ".json?limit=" + Limit;
+                    break;
+
+                case SubSortBy.New:
+                    url += "new/.json?sort=new&limit=" + Limit;
+                    break;
+
+                case SubSortBy.Rising:
+                    url += "new/.json?sort=rising&limit=" + Limit;
+                    break;
+
+                case SubSortBy.TopAllTime:
+                    url += "top/.json?sort=top&t=all&limit=" + Limit;
+                    break;
+
+                case SubSortBy.TopYear:
+                    url += "top/.json?sort=top&t=year&limit=" + Limit;
+                    break;
+
+                case SubSortBy.TopMonth:
+                    url += "top/.json?sort=top&t=month&limit=" + Limit;
+                    break;
+
+                case SubSortBy.TopWeek:
+                    url += "top/.json?sort=top&t=week&limit=" + Limit;
+                    break;
+
+                case SubSortBy.TopToday:
+                    url += "top/.json?sort=top&t=day&limit=" + Limit;
+                    break;
+
+                case SubSortBy.TopHour:
+                    url += "top/.json?sort=top&t=hour&limit=" + Limit;
+                    break;
+
+                case SubSortBy.ControversalAllTime:
+                    url += "controversial/.json?sort=controversial&t=all&limit=" + Limit;
+                    break;
+
+                case SubSortBy.ControversalYear:
+                    url += "controversial/.json?sort=controversial&t=year&limit=" + Limit;
+                    break;
+
+                case SubSortBy.ControversalMonth:
+                    url += "controversial/.json?sort=controversial&t=month&limit=" + Limit;
+                    break;
+
+                case SubSortBy.ControversalWeek:
+                    url += "controversial/.json?sort=controversial&t=week&limit=" + Limit;
+                    break;
+
+                case SubSortBy.ControversalToday:
+                    url += "controversial/.json?sort=controversial&t=day&limit=" + Limit;
+                    break;
+
+                case SubSortBy.ControversalHour:
+                    url += "controversial/.json?sort=controversial&t=hour&limit=" + Limit;
+                    break;
+            }
+
+            if (!string.IsNullOrEmpty(after))
+                url += "&after=" + after;
+
+            if (!string.IsNullOrEmpty(before))
+                url += "&before=" + before;
+
+            var request = new Request
+            {
+                Method = "GET",
+                Cookie = session.Cookie,
+                Url = url                 
+            };
+
+            var json = string.Empty;
+            if (request.Execute(out json) != System.Net.HttpStatusCode.OK)
+                throw new Exception(json);
+
+            var o = JObject.Parse(json);
+
+            // convert to a post listing
+            var list = Post.FromJsonList(o["data"]["children"]);
+            list.ModHash = o["data"]["modhash"].ToString(); 
+            list.Before = o["data"]["before"].ToString();
+            list.After = o["data"]["after"].ToString();            
+            return list;
+
+        }
+
         /// <summary>
         /// A search limited to a specific sub reddit
         /// </summary>

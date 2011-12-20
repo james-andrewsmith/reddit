@@ -200,12 +200,12 @@ namespace com.reddit.api
 
         #region // Conversion //
 
-        internal static List<Post> FromJsonList(JToken children)
+        internal static PostListing FromJsonList(JToken children)
         {
-            var list = new List<Post>();
+            var list = new PostListing();
 
-            //foreach (var child in children)
-            //    list.Add(FromJson(child));
+            foreach (var child in children.Children().Select(post => post["data"]))            
+                list.Add(FromJson(child));
 
             return list;
         }
@@ -255,6 +255,10 @@ namespace com.reddit.api
 
         #region // Actions //
 
+        public static void Submit(Session session, Post post)
+        {
+            throw new NotImplementedException();
+        }
 
         /// <summary>
         /// https://github.com/reddit/reddit/wiki/API:-hide
@@ -264,12 +268,6 @@ namespace com.reddit.api
         public static void Hide(Session session, string id)
         {
             // http://www.reddit.com/api/hide
-
-            // POST
-
-            // id = post thing id
-            // uh = modhash
-
             Thing.Hide(session, id);
         }
 
@@ -281,11 +279,6 @@ namespace com.reddit.api
         /// <see cref="https://github.com/reddit/reddit/wiki/API:-report"/>
         public static void Report(Session session, string id)
         {
-
-            // POST
-
-            // id = post thing id
-            // uh = modhash
             Thing.Report(session, id);
         }
 
@@ -297,8 +290,6 @@ namespace com.reddit.api
         /// <see cref="https://github.com/reddit/reddit/wiki/API:-save"/>
         public static void Save(Session session, string id)
         {
-            //  http://www.reddit.com/api/save
-
             Thing.Save(session, id);
         }
 
@@ -334,5 +325,6 @@ namespace com.reddit.api
         }
 
         #endregion
+
     }
 }

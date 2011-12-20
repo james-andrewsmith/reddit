@@ -160,6 +160,42 @@ namespace com.reddit.api
             };
         }
 
+
+        #region // Get Saved //
+        public static PostListing GetSaved(Session session)
+        {
+            return GetSaved(session, string.Empty);
+        }
+
+        public static PostListing GetSaved(Session session, string after)
+        {
+            return GetSaved(session, string.Empty, string.Empty);
+        }
+
+        public static PostListing GetSaved(Session session, string after, string before)
+        {
+            // 
+            var request = new Request
+            {
+                Url = "http://www.reddit.com/saved/.json",
+                Method = "GET",
+                Cookie = session.Cookie
+            };
+
+            var json = string.Empty;
+            if (request.Execute(out json) != System.Net.HttpStatusCode.OK)
+                throw new Exception(json);
+
+            var o = JObject.Parse(json);
+
+            // convert to a post listing
+            var list = Post.FromJsonList(o["data"]["children"]);
+            list.Before = o["data"]["before"].ToString();
+            list.After = o["data"]["after"].ToString();
+            return list;
+        }
+        #endregion
+
         public static void GetSubmissionsAndComments(Session session, out List<int> submissions, out List<int> comments)
         {
             submissions = null;

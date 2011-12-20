@@ -11,8 +11,12 @@ namespace com.reddit.api
 {
     public sealed class FrontPage
     {
-
-        public static List<Post> List(Session session)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="session"></param>
+        /// <returns></returns>
+        public static PostListing List(Session session)
         {
             // GET
             // http://www.reddit.com/.json
@@ -29,8 +33,12 @@ namespace com.reddit.api
 
             var o = JObject.Parse(json);
 
-            // convert the posts
-            return Post.FromJsonList(o["data"]["children"]);
+            // convert to a post listing
+            var list = Post.FromJsonList(o["data"]["children"]);
+            list.ModHash = o["data"]["modhash"].ToString(); 
+            list.Before = o["data"]["before"].ToString();
+            list.After = o["data"]["after"].ToString();
+            return list;
         }
 
     }
