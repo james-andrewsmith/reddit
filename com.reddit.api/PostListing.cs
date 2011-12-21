@@ -6,7 +6,8 @@ using System.Text;
 namespace com.reddit.api
 {
     public sealed class PostListing : List<Post>
-    {        
+    {
+        #region // Properties //
         public string Before
         {
             get;
@@ -24,5 +25,6 @@ namespace com.reddit.api
             get;
             set;
         }
+        #endregion
     }
 }

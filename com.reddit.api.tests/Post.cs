@@ -119,7 +119,6 @@ namespace com.reddit.api.tests
                 break;
             }
 
-
             Post.Save(session, id);
 
             Post.UnSave(session, id);

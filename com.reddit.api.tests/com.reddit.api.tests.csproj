@@ -47,7 +47,9 @@
   <ItemGroup>
     <Compile Include="Comment.cs" />
     <Compile Include="Configuration.cs" />
+    <Compile Include="Flair.cs" />
     <Compile Include="FrontPage.cs" />
+    <Compile Include="InfoTestClass.cs" />
     <Compile Include="Post.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sub.cs" />

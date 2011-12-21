@@ -260,9 +260,32 @@ namespace com.reddit.api
 
         }
 
-        public static void Submit(Session session, Post post)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="session"></param>
+        /// <param name="post"></param>
+        /// <see cref="https://github.com/reddit/reddit/wiki/API"/>
+        public static void Submit(Session session, Post post, PostKind kind)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrEmpty((kind == PostKind.Link ? post.Url : post.SelfText)))
+                throw new Exception("No link or self text added to the new post");
+
+            if (string.IsNullOrEmpty(post.SubReddit))
+                throw new Exception("");
+
+            if (string.IsNullOrEmpty(post.SubReddit))
+                throw new Exception("");
+
+            var request = new Request
+            {
+                Url = "http://www.reddit.com/api/submit",
+                Method = "POST",
+                Cookie = session.Cookie,
+                Content = "uh=" + session.ModHash + "&kind=" + (kind == PostKind.Link ? "link" : "self") + "&url=" + (kind == PostKind.Link ? post.Url : post.SelfText) + "&sr=" + post.SubReddit + "&title=" + post.Title + "&r=" + post.SubReddit + "&renderstyle=html"
+
+            };
+
         }
 
         /// <summary>

@@ -48,8 +48,14 @@
     <Compile Include="CommentListing.cs" />
     <Compile Include="CommentSortBy.cs" />
     <Compile Include="Extension.cs" />
+    <Compile Include="Flair.cs" />
+    <Compile Include="FlairListing.cs" />
     <Compile Include="FrontPage.cs" />
+    <Compile Include="Info.cs" />
+    <Compile Include="Media.cs" />
+    <Compile Include="MediaEmbed.cs" />
     <Compile Include="Post.cs" />
+    <Compile Include="PostKind.cs" />
     <Compile Include="PostListing.cs" />
     <Compile Include="Request.cs" />
     <Compile Include="RequestHash.cs" />

@@ -19,16 +19,42 @@ namespace com.reddit.api
         /// </summary>
         /// <param name="session"></param>
         /// <param name="id"></param>
-        internal static void Hide(Session session, string id)
+        internal static void Hide(Session session, string id, string modhash)
         {
-            // http://www.reddit.com/api/hide
+             
+            var request = new Request
+            {
+                Url = "http://www.reddit.com/api/hide",
+                Method = "POST",
+                Content = "uh=" + modhash + "&id=" + id,
+                Cookie = session.Cookie
+            };
 
-            // POST
+            var json = string.Empty;
+            if (request.Execute(out json) != System.Net.HttpStatusCode.OK)
+                throw new Exception(json);
 
-            // id = post thing id
-            // uh = modhash
-
+            if (json != "{}")
+                throw new Exception(json);
             
+        }
+
+        internal static void UnHide(Session session, string id, string modhash)
+        {
+            var request = new Request
+            {
+                Url = "http://www.reddit.com/api/unhide",
+                Method = "POST",
+                Content = "uh=" + modhash + "&id=" + id,
+                Cookie = session.Cookie
+            };
+
+            var json = string.Empty;
+            if (request.Execute(out json) != System.Net.HttpStatusCode.OK)
+                throw new Exception(json);
+
+            if (json != "{}")
+                throw new Exception(json);
         }
 
         /// <summary>
@@ -37,7 +63,7 @@ namespace com.reddit.api
         /// <param name="session"></param>
         /// <param name="id"></param>
         /// <see cref="https://github.com/reddit/reddit/wiki/API:-report"/>
-        internal static void Report(Session session, string id)
+        internal static void Report(Session session, string id, string modhash)
         {
 
             // POST
@@ -53,44 +79,66 @@ namespace com.reddit.api
         /// <param name="session"></param>
         /// <param name="id"></param>
         /// <see cref="https://github.com/reddit/reddit/wiki/API:-save"/>
-        internal static void Save(Session session, string id)
+        internal static void Save(Session session, string id, string modhash)
         {
             //  http://www.reddit.com/api/save
+            var request = new Request
+            {
+                Url = "http://www.reddit.com/api/save",
+                Method = "POST",
+                Content = "uh=" + modhash + "&id=" + id,
+                Cookie = session.Cookie
+            };
 
+            var json = string.Empty;
+            if (request.Execute(out json) != System.Net.HttpStatusCode.OK)
+                throw new Exception(json);
+
+            if (json != "{}")
+                throw new Exception(json);
         }
 
-        internal static void UnSave(Session session, string id)
+        internal static void UnSave(Session session, string id, string modhash)
         {
+            var request = new Request
+            {
+                Url = "http://www.reddit.com/api/unsave",
+                Method = "POST",
+                Content = "uh=" + modhash + "&id=" + id,
+                Cookie = session.Cookie
+            };
 
+            var json = string.Empty;
+            if (request.Execute(out json) != System.Net.HttpStatusCode.OK)
+                throw new Exception(json);
+
+            if (json != "{}")
+                throw new Exception(json);
         }
 
-        internal static void UnHide(Session session, string id)
+
+        internal static void VoteUp(Session session, string id, string modhash)
         {
-
+            Vote(session, id, modhash, 1);
         }
 
-        internal static void VoteUp(Session session, string id)
+        internal static void VoteDown(Session session, string id, string modhash)
         {
-            Vote(session, id, 1);
+            Vote(session, id, modhash, -1);
         }
 
-        internal static void VoteDown(Session session, string id)
+        internal static void VoteNull(Session session, string id, string modhash)
         {
-            Vote(session, id, -1);
+            Vote(session, id, modhash, 0);
         }
 
-        internal static void VoteNull(Session session, string id)
-        {
-            Vote(session, id, 0);
-        }
-
-        private static void Vote(Session session, string id, int direction)
+        private static void Vote(Session session, string id, string modhash, int direction)
         {
             var request = new Request
             {
                 Url = "http://www.reddit.com/api/vote",
                 Method = "POST",
-                Content = "uh=" + session.ModHash + "&id=" + id + "&dir=" + direction.ToString(),
+                Content = "uh=" + modhash + "&id=" + id + "&dir=" + direction.ToString(),
                 Cookie = session.Cookie
             };
 
