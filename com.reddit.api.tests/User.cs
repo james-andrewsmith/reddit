@@ -26,6 +26,20 @@ namespace com.reddit.api.tests
         }
 
         [TestMethod]
+        [ExpectedException(typeof(RedditException))]
+        public void Logout()
+        {
+            // login using regular creds
+            var session = User.Login(Configuration.GetKey("username"), Configuration.GetKey("password"));
+
+            // logout the session
+            User.Logout(session);
+
+            // attempt to get user saved posts (should result in an error)
+            User.GetSaved(session); 
+        }
+
+        [TestMethod]
         public void ListSaved()
         {
             // login using regular creds

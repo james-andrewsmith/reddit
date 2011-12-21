@@ -5,7 +5,7 @@ using System.Text;
 
 namespace com.reddit.api
 {
-    public sealed class SearchListing : List<Post>
+    public sealed class RedditException : Exception
     {
     }
 }

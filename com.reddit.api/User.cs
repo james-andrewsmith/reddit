@@ -160,6 +160,10 @@ namespace com.reddit.api
             };
         }
 
+        public static void Logout(Session session)
+        {
+            throw new NotImplementedException();
+        }
 
         #region // Get Saved //
         public static PostListing GetSaved(Session session)

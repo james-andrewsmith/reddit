@@ -7,6 +7,7 @@ namespace com.reddit.api
 {
     public sealed class CommentListing : List<Comment>
     {
+        #region // Properties //
         public string After
         {
             get;
@@ -24,5 +25,6 @@ namespace com.reddit.api
             get;
             set;
         }
+        #endregion
     }
 }
