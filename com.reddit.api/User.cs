@@ -162,10 +162,11 @@ namespace com.reddit.api
 
         public static void Logout(Session session)
         {
-            throw new NotImplementedException();
+            
         }
 
         #region // Get Saved //
+
         public static PostListing GetSaved(Session session)
         {
             return GetSaved(session, string.Empty);
@@ -199,6 +200,24 @@ namespace com.reddit.api
             return list;
         }
         #endregion
+
+        public static User Get(Session session, string username)
+        {
+            // build a request
+            var request = new Request
+            {
+                Url = "http://www.reddit.com/user/" + username + "/about.json",
+                Method = "GET",
+                Cookie = session.Cookie
+            };
+
+            var json = string.Empty;
+            if (request.Execute(out json) != System.Net.HttpStatusCode.OK)
+                throw new Exception(json);
+
+            var o = JObject.Parse(json);
+            return JsonConvert.DeserializeObject<User>(o["data"].ToString());
+        }
 
         public static void GetSubmissionsAndComments(Session session, out List<int> submissions, out List<int> comments)
         {

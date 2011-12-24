@@ -12,11 +12,13 @@ namespace com.reddit.api.tests
         [TestMethod]
         public void GetInfo_Imgur()
         {
+            Assert.Fail();
         }
 
         [TestMethod]
         public void GetInfo_Github()
         {
+            Assert.Fail();
         }
     }
 }

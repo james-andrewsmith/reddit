@@ -30,7 +30,7 @@ namespace com.reddit.api
 
         #region // Properties // 
 
-        public string Type
+        public string EmbedType
         {
             get;
             set;

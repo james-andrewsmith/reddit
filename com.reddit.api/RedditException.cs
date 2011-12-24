@@ -7,5 +7,8 @@ namespace com.reddit.api
 {
     public sealed class RedditException : Exception
     {
+        public RedditException(string message)
+            : base(message)
+        { }
     }
 }

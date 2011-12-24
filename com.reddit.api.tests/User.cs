@@ -52,7 +52,20 @@ namespace com.reddit.api.tests
         [TestMethod]
         public void ListComments()
         {
-
+            Assert.Fail();
         }
+        
+        [TestMethod]
+        public void GetLiked()
+        {
+            Assert.Fail();
+        }        
+            
+        [TestMethod]
+        public void GetDisliked()
+        {
+            Assert.Fail();
+        }
+            
     }
 }

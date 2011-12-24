@@ -10,7 +10,8 @@ using Newtonsoft.Json.Serialization;
 namespace com.reddit.api
 {
     /// <summary>
-    /// 
+    /// Story, Post, Link - really we could use any of these terms, post 
+    /// seemed to make sense because we 'post' to reddit / a subreddit. 
     /// </summary>
     public sealed class Post
     {
@@ -23,17 +24,17 @@ namespace com.reddit.api
             set;
         }
 
-        public object MediaEmbed
+        public MediaEmbed MediaEmbed
         {
             get;
             set;
         }
 
-        public object LevenShtein
-        {
-            get;
-            set;
-        }
+        // public object LevenShtein
+        // {
+        //     get;
+        //     set;
+        // }
 
         public string SubReddit
         {
@@ -82,7 +83,7 @@ namespace com.reddit.api
             set;
         }
 
-        public object Media
+        public Media Media
         {
             get;
             set;
@@ -255,9 +256,64 @@ namespace com.reddit.api
 
         #region // Actions //
 
-        public static PostListing GetRelated(Session session, Post post)
+        public static PostListing Get(Session session, string id)
         {
+            // check this is a link (in the correct format)
+            if (!id.StartsWith("t3_"))
+                throw new RedditException("ID is not of a link/post");
 
+            // build a request
+            var request = new Request
+            {
+                Url = "http://www.reddit.com/by_id/" + id + ".json",
+                Cookie = session.Cookie
+            };
+
+            var json = string.Empty;
+            if (request.Execute(out json) != System.Net.HttpStatusCode.OK)
+                throw new Exception(json);
+
+            return JsonConvert.DeserializeObject<PostListing>(json);
+        }
+
+        public static CommentListing GetComments(Session session, string id)
+        {
+            // Make sure we process the request with the type removed, so 
+            // we just pass the base-36 ID
+            id = id.Replace("t3_", string.Empty);
+
+            // build a request
+            var request = new Request
+            {
+                Url = "http://www.reddit.com/comments/" + id + ".json",
+                Cookie = session.Cookie
+            };
+
+            var json = string.Empty;
+            if (request.Execute(out json) != System.Net.HttpStatusCode.OK)
+                throw new Exception(json);
+
+            return JsonConvert.DeserializeObject<CommentListing>(json);
+        }
+
+        public static PostListing GetRelated(Session session, string id)
+        {
+            // Make sure we process the request with the type removed, so 
+            // we just pass the base-36 ID
+            id = id.Replace("t3_", string.Empty);
+
+            // build a request
+            var request = new Request
+            {
+                Url = "http://www.reddit.com/related/" + id + ".json",
+                Cookie = session.Cookie
+            };
+
+            var json = string.Empty;
+            if (request.Execute(out json) != System.Net.HttpStatusCode.OK)
+                throw new Exception(json);
+
+            return JsonConvert.DeserializeObject<PostListing>(json);
         }
 
         /// <summary>
@@ -272,19 +328,28 @@ namespace com.reddit.api
                 throw new Exception("No link or self text added to the new post");
 
             if (string.IsNullOrEmpty(post.SubReddit))
-                throw new Exception("");
+                throw new Exception("No subreddit set");
 
-            if (string.IsNullOrEmpty(post.SubReddit))
-                throw new Exception("");
+            if (string.IsNullOrEmpty(post.Title))
+                throw new Exception("No title provided");
 
             var request = new Request
             {
                 Url = "http://www.reddit.com/api/submit",
                 Method = "POST",
                 Cookie = session.Cookie,
-                Content = "uh=" + session.ModHash + "&kind=" + (kind == PostKind.Link ? "link" : "self") + "&url=" + (kind == PostKind.Link ? post.Url : post.SelfText) + "&sr=" + post.SubReddit + "&title=" + post.Title + "&r=" + post.SubReddit + "&renderstyle=html"
-
+                Content = "uh=" + session.ModHash + 
+                          "&kind=" + (kind == PostKind.Link ? "link" : "self") + 
+                          "&url=" + (kind == PostKind.Link ? post.Url : post.SelfText) + 
+                          "&sr=" + post.SubReddit + 
+                          "&title=" + post.Title + 
+                          "&r=" + post.SubReddit + 
+                          "&renderstyle=html"
             };
+
+            var json = string.Empty;
+            if (request.Execute(out json) != System.Net.HttpStatusCode.OK)
+                throw new Exception(json);
 
         }
 
@@ -293,10 +358,10 @@ namespace com.reddit.api
         /// </summary>
         /// <param name="session"></param>
         /// <param name="id"></param>
-        public static void Hide(Session session, string id)
+        public static void Hide(Session session, string id, string modhash)
         {
             // http://www.reddit.com/api/hide
-            Thing.Hide(session, id);
+            Thing.Hide(session, id, modhash);
         }
 
         /// <summary>
@@ -305,9 +370,9 @@ namespace com.reddit.api
         /// <param name="session"></param>
         /// <param name="id"></param>
         /// <see cref="https://github.com/reddit/reddit/wiki/API:-report"/>
-        public static void Report(Session session, string id)
+        public static void Report(Session session, string id, string modhash)
         {
-            Thing.Report(session, id);
+            Thing.Report(session, id, modhash);
         }
 
         /// <summary>
@@ -316,40 +381,40 @@ namespace com.reddit.api
         /// <param name="session"></param>
         /// <param name="id"></param>
         /// <see cref="https://github.com/reddit/reddit/wiki/API:-save"/>
-        public static void Save(Session session, string id)
+        public static void Save(Session session, string id, string modhash)
         {
-            Thing.Save(session, id);
+            Thing.Save(session, id, modhash);
         }
 
 
-        public static void UnSave(Session session, string id)
+        public static void UnSave(Session session, string id, string modhash)
         {
 
-            Thing.UnSave(session, id);
+            Thing.UnSave(session, id, modhash);
         }
 
-        public static void UnHide(Session session, string id)
+        public static void UnHide(Session session, string id, string modhash)
         {
 
-            Thing.UnHide(session, id);
+            Thing.UnHide(session, id, modhash);
         }
 
-        public static void VoteUp(Session session, string id)
+        public static void VoteUp(Session session, string id, string modhash)
         {
 
-            Thing.VoteUp(session, id);
+            Thing.VoteUp(session, id, modhash);
         }
 
-        public static void VoteDown(Session session, string id)
+        public static void VoteDown(Session session, string id, string modhash)
         {
 
-            Thing.VoteDown(session, id);
+            Thing.VoteDown(session, id, modhash);
         }
 
-        public static void VoteNull(Session session, string id)
+        public static void VoteNull(Session session, string id, string modhash)
         {
 
-            Thing.VoteNull(session, id);
+            Thing.VoteNull(session, id, modhash);
         }
 
         #endregion

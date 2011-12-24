@@ -7,17 +7,31 @@ namespace com.reddit.api
 {
     public sealed class CommentListing : List<Comment>
     {
+
+        #region // Constructor //
+        public CommentListing()
+        {
+            More = new List<string>();
+        }
+        #endregion
+
         #region // Properties //
-        public string After
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public List<string> More
         {
             get;
             set;
         }
 
-        public string Before
+        public bool HasMore
         {
-            get;
-            set;
+            get
+            {
+                return More.Count > 0;
+            }
         }
 
         public string ModHash

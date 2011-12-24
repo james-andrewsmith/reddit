@@ -29,6 +29,16 @@ namespace com.reddit.api
 
         #region // Data Access //
 
+        public static FlairListing GetFlair(Session session, string sub)
+        {
+            return GetFlair(session, sub, string.Empty);
+        }
+
+        public static FlairListing GetFlair(Session session, string sub, string after)
+        {
+            return GetFlair(session, sub, string.Empty, string.Empty);
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -39,6 +49,7 @@ namespace com.reddit.api
         public static FlairListing GetFlair(Session session, string sub, string after, string before)
         {
             // http://www.reddit.com/api/flairlist
+            throw new NotImplementedException();
         }
 
         #endregion

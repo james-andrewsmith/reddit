@@ -17,8 +17,11 @@ namespace com.reddit.api
         /// <returns></returns>
         public static PostListing FromUrl(Session session, string url)
         {
-
+            throw new NotImplementedException();
         }
+
+
+
 
     }
 }

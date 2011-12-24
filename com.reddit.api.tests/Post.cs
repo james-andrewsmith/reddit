@@ -21,7 +21,7 @@ namespace com.reddit.api.tests
             };
 
             // attempt to save
-            Post.Submit(session, post);
+            Post.Submit(session, post, PostKind.Link);
         }
 
         [TestMethod]
@@ -32,7 +32,6 @@ namespace com.reddit.api.tests
 
             // get a popular sub
             var list = Sub.GetListing(session, "pics");
-            session.ModHash = list.ModHash;
 
             // no modhash
             if (string.IsNullOrEmpty(list.ModHash))
@@ -51,13 +50,13 @@ namespace com.reddit.api.tests
             }            
 
             // vote it up
-            Post.VoteUp(session, id);
+            Post.VoteUp(session, id, list.ModHash);
 
             // vote it down
-            Post.VoteDown(session, id);
+            Post.VoteDown(session, id, list.ModHash);
 
             // vote it null
-            Post.VoteNull(session, id);
+            Post.VoteNull(session, id, list.ModHash);
 
         }
 
@@ -87,9 +86,9 @@ namespace com.reddit.api.tests
                 break;
             }
 
-            Post.Hide(session, id);
+            Post.Hide(session, id, list.ModHash);
 
-            Post.UnHide(session, id);
+            Post.UnHide(session, id, list.ModHash);
 
         }
 
@@ -101,8 +100,7 @@ namespace com.reddit.api.tests
 
             // get a popular sub
             var list = Sub.GetListing(session, "pics");
-            session.ModHash = list.ModHash;
-
+            
             // no modhash
             if (string.IsNullOrEmpty(list.ModHash))
                 Assert.Fail();
@@ -119,9 +117,9 @@ namespace com.reddit.api.tests
                 break;
             }
 
-            Post.Save(session, id);
+            Post.Save(session, id, list.ModHash);
 
-            Post.UnSave(session, id);
+            Post.UnSave(session, id, list.ModHash);
            
         }
 
