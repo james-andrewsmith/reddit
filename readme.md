@@ -13,6 +13,7 @@ file with the following keys setup.
   <appSettings>
     <add key="username" value="your-username" />
     <add key="password" value="your-password" />
+    <add key="moderated-subreddit" value="subreddit-you-moderate" />    
   </appSettings>
 </configuration>
 
