@@ -5,7 +5,21 @@ using System.Text;
 
 namespace com.reddit.api
 {
-    class Search
+    public sealed class Search
     {
+
+        #region // Properties //
+
+        #endregion 
+
+        #region // Actions //
+
+        public static SearchListing Query(string qry)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+
     }
 }

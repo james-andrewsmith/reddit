@@ -10,7 +10,7 @@ namespace com.reddit.api.tests
     public class FrontPageTestClass
     {
         [TestMethod]
-        public void TestMethod1()
+        public void ListFrontPageStories()
         {
             // login using regular creds
             var session = User.Login(Configuration.GetKey("username"), Configuration.GetKey("password"));
@@ -20,6 +20,12 @@ namespace com.reddit.api.tests
 
             // ensure we have posts on the front page
             Assert.IsTrue(posts.Count > 0);
+        }
+
+        [TestMethod]
+        public void ListFrontPageStories_NotLoggedIn()
+        {
+            Assert.Fail("Not yet implemented");
         }
     }
 }

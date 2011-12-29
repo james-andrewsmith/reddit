@@ -7,50 +7,41 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace com.reddit.api.tests
 {
     [TestClass]
-    public class CommentTestClass
+    public class FriendTestClass
     {
         [TestMethod]
-        public void GetCommentsForPost()
+        public void ListFriends()
         {
             // login using regular creds
             var session = User.Login(Configuration.GetKey("username"), Configuration.GetKey("password"));
+            var friends = Friend.List(session);
 
-            // a story about a nice guy who donated his tickets to a child at christmas
-            var postID = "nndrb";
-
-            // get a post with comments
-            var comments = Comment.GetCommentsForPost(session, postID);
-
-            // list all them
-            Assert.IsNotNull(comments);
-            Assert.IsTrue(comments.Count > 0);
+            Assert.IsNotNull(friends);
+            Assert.IsTrue(friends.Count > 0, "No friends in list, ensure you have at least one reddit friend. If so, something went wrong with the friend list request");
         }
 
-
         [TestMethod]
-        public void SubmitComment()
+        public void ListFriends_NotLoggedIn()
         {
             Assert.Fail();
         }
 
         [TestMethod]
-        public void Vote_UpDownNull()
+        public void Add_Remove()
         {
             Assert.Fail();
         }
-         
 
         [TestMethod]
-        public void Hide_UnHide()
+        public void ListFriendPosts()
         {
             Assert.Fail();
         }
-        
+
         [TestMethod]
-        public void Save_UnSave()
+        public void ListFriendComments()
         {
             Assert.Fail();
         }
-         
     }
 }

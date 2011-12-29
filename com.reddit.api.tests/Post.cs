@@ -10,14 +10,34 @@ namespace com.reddit.api.tests
     public class PostTestClass
     {
         [TestMethod]
-        public void Submit()
+        public void Submit_Link()
         {
             // login
             var session = User.Login(Configuration.GetKey("username"), Configuration.GetKey("password"));
 
             var post = new Post
             {
-                
+                Url = "https://github.com/pressf12/reddit",
+                Title = "A fully featured C# reddit API client",
+                SubReddit = "csharpredditclient"
+            };
+
+            // attempt to save
+            Post.Submit(session, post, PostKind.Link);
+        }
+
+        [TestMethod]
+        public void Submit_Self()
+        {
+            // login
+            var session = User.Login(Configuration.GetKey("username"), Configuration.GetKey("password"));
+
+            var post = new Post
+            {
+                SelfText = "This post was generated as part of the unit testing for the " +
+                           "C# client available here: https://github.com/pressf12/reddit",
+                Title = "IAMA fully featured C# reddit API client, AMA.",
+                SubReddit = "csharpredditclient"
             };
 
             // attempt to save

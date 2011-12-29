@@ -12,7 +12,11 @@ namespace com.reddit.api.tests
         [TestMethod]
         public void Search()
         {
+            // login using regular creds
+            var session = User.Login(Configuration.GetKey("username"), Configuration.GetKey("password"));
+
             // all logic is within the search query really...
+            
 
             Assert.Fail();
         }

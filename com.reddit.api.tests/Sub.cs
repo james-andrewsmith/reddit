@@ -9,7 +9,20 @@ namespace com.reddit.api.tests
     [TestClass]
     public class SubTestClass
     {
-        
+                
+        /// <summary>
+        /// List all the subreddits
+        /// </summary>
+        [TestMethod]
+        public void ListSubs()
+        {
+            var session = User.Login(Configuration.GetKey("username"), Configuration.GetKey("password"));
+            var list = Sub.List(session);
+
+            Assert.IsNotNull(list);
+            Assert.IsTrue(list.Count > 0);
+        }
+
         /// <summary>
         /// Get the currently subscribed reddits of the user
         /// </summary>
@@ -25,6 +38,28 @@ namespace com.reddit.api.tests
         /// This is a pretty popular reddit to use.
         /// </summary>
         private const string SubRedditToTestWith = "pics";
+
+        
+        [TestMethod]
+        public void GetModerators()
+        {
+            var session = User.Login(Configuration.GetKey("username"), Configuration.GetKey("password"));
+            var users = Sub.GetModerators(session, SubRedditToTestWith);
+
+            Assert.IsNotNull(users);
+            Assert.IsTrue(users.Count > 0);
+        }
+
+
+        [TestMethod]
+        public void GetContributors()
+        {
+            var session = User.Login(Configuration.GetKey("username"), Configuration.GetKey("password"));
+            var users = Sub.GetContributors(session, SubRedditToTestWith);
+
+            Assert.IsNotNull(users);
+            Assert.IsTrue(users.Count > 0);
+        }
 
         /// <summary>
         /// Test the paging of the PostListing object to get multiple pages of the same data
@@ -117,6 +152,63 @@ namespace com.reddit.api.tests
             var session = User.Login(Configuration.GetKey("username"), Configuration.GetKey("password"));
             var posts = Sub.GetListing(session, SubRedditToTestWith, SubSortBy.TopYear);
             Assert.IsTrue(posts.Count > 0);
+        }
+
+        /// <summary>
+        /// This is the test reddit for this SDK
+        /// </summary>
+        private string SubRedditToTestModWith = Configuration.GetKey("moderated-subreddit");
+
+        [TestMethod]
+        public void GetReportedPosts()
+        {
+            var session = User.Login(Configuration.GetKey("username"), Configuration.GetKey("password"));
+            var posts = Sub.GetReportedPosts(session, SubRedditToTestModWith);
+            Assert.IsTrue(posts.Count > 0);
+        }
+        
+        [TestMethod]
+        public void GetTrafficStats()
+        {
+            var session = User.Login(Configuration.GetKey("username"), Configuration.GetKey("password"));
+            Sub.GetTrafficStats(session, SubRedditToTestModWith);
+            Assert.Fail();
+        }
+
+        [TestMethod]
+        public void GetSpam()
+        {
+            var session = User.Login(Configuration.GetKey("username"), Configuration.GetKey("password"));
+            var posts = Sub.GetSpam(session, SubRedditToTestModWith);
+            Assert.Fail();
+        }
+
+        [TestMethod]
+        public void GetModerationLog()
+        {
+            var session = User.Login(Configuration.GetKey("username"), Configuration.GetKey("password"));
+            var log = Sub.GetModerationLog(session, SubRedditToTestModWith);
+            Assert.Fail();
+        }
+        
+        [TestMethod]
+        public void GetBannedUsers()
+        {            
+            var session = User.Login(Configuration.GetKey("username"), Configuration.GetKey("password"));
+            var users = Sub.GetBannedUsers(session, SubRedditToTestModWith);
+            Assert.Fail();
+        }
+
+        [TestMethod]
+        public void Ban_Unban_User()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod]
+        public void GrantFlair_DeleteFlair()
+        {
+            Assert.Fail();
         }
     }
 }

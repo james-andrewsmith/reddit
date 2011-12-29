@@ -29,7 +29,7 @@ namespace com.reddit.api
             AuthorFlairCssClass = token["author_flair_css_class"].ToString();
             Created = Convert.ToInt32(token["created"].ToString()).ToDateTime();
             AuthorFlairText = token["author_flair_text"].ToString();
-            Downs = token["downs"].ToString();
+            Downs = Convert.ToInt32(token["downs"].ToString());
             Author = token["author"].ToString();
             CreatedUtc = Convert.ToInt32(token["created_utc"].ToString()).ToDateTime();
             BodyHtml = token["body_html"].ToString();
@@ -118,19 +118,97 @@ namespace com.reddit.api
             set;
         }
 
-            Created = Convert.ToInt32(token["created"].ToString()).ToDateTime();
-            AuthorFlairText = token["author_flair_text"].ToString();
-            Downs = token["downs"].ToString();
-            Author = token["author"].ToString();
-            CreatedUtc = Convert.ToInt32(token["created_utc"].ToString()).ToDateTime();
-            BodyHtml = token["body_html"].ToString();
-            LinkID = token["link_id"].ToString();
-            ParentID = token["parent_id"].ToString();
-            Likes = token["likes"].ToString();
-            ID = token["id"].ToString();
-            SubReddit = token["subreddit"].ToString();
-            Ups = Convert.ToInt32(token["ups"].ToString());
-            Name = token["name"].ToString();
+        
+        [JsonProperty("created")]
+        public DateTime Created 
+        {
+            get;
+            set;
+        }
+        
+        [JsonProperty("author_flair_text")]
+        public string AuthorFlairText 
+        {
+            get;
+            set;
+        } 
+        
+        [JsonProperty("downs")]
+        public int Downs 
+        {
+            get;
+            set;
+        }
+        
+        [JsonProperty("author")]
+        public string Author 
+        {
+            get;
+            set;
+        }
+        
+        [JsonProperty("created_utc")]
+        public DateTime CreatedUtc 
+        {
+            get;
+            set;
+        }
+
+        [JsonProperty("body_html")]
+        public string BodyHtml 
+        {
+            get;
+            set;
+        }
+        
+        [JsonProperty("link_id")]
+        public string LinkID 
+        {
+            get;
+            set;
+        }
+        
+        [JsonProperty("parent_id")]
+        public string ParentID 
+        {
+            get;
+            set;
+        }
+        
+        [JsonProperty("likes")]
+        public string Likes 
+        {
+            get;
+            set;
+        }
+        
+        [JsonProperty("id")]
+        public string ID 
+        {
+            get;
+            set;
+        }
+         
+        [JsonProperty("subreddit")]
+        public string SubReddit 
+        {
+            get;
+            set;
+        }
+        
+        [JsonProperty("ups")]
+        public int Ups 
+        {
+            get;
+            set;
+        }
+        
+        [JsonProperty("name")]
+        public string Name 
+        {
+            get;
+            set;
+        }
 
         public CommentListing Replies
         {
@@ -261,6 +339,7 @@ namespace com.reddit.api
             foreach (var comment in comments)
                 list.Add(new Comment(comment));
 
+            return list;
         }
 
         #endregion

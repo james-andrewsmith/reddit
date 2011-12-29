@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace com.reddit.api.tests
+namespace com.reddit.api.tests 
 {
     /// <summary>
     /// Summary description for UnitTest1
@@ -50,8 +50,22 @@ namespace com.reddit.api.tests
         }
 
         [TestMethod]
+        public void ListSubmitted()
+        {
+            // login using regular creds
+            var session = User.Login(Configuration.GetKey("username"), Configuration.GetKey("password"));
+
+
+            Assert.Fail();
+        }
+        
+        [TestMethod]
         public void ListComments()
         {
+            // login using regular creds
+            var session = User.Login(Configuration.GetKey("username"), Configuration.GetKey("password"));
+
+
             Assert.Fail();
         }
         

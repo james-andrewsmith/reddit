@@ -86,7 +86,7 @@ namespace com.reddit.api
         /// <param name="after"></param>
         /// <param name="before"></param>
         /// <returns></returns>
-        public static List<Sub> List(Session session, string sub, string after = "", string before = "")
+        public static List<Sub> List(Session session, string after = "", string before = "")
         {
             throw new NotImplementedException();
         }
@@ -254,6 +254,84 @@ namespace com.reddit.api
             list.After = o["data"]["after"].ToString();            
             return list;
 
+        }
+
+        public static UserListing GetModerators(Session session, string sub)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static UserListing GetContributors(Session session, string sub)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static PostListing GetReportedPosts(Session session, string sub)
+        {
+            // 
+
+            var request = new Request
+            {
+                Url = "http://www.reddit.com/r/" + sub + "/about/reports/.json",
+                Method = "GET",
+                Cookie = session.Cookie
+            };
+
+            throw new NotImplementedException();
+        }
+
+        public static void GetTrafficStats(Session session, string sub)
+        {
+
+            var request = new Request
+            {
+                Url = "http://www.reddit.com/r/" + sub + "/about/traffic/.json",
+                Method = "GET",
+                Cookie = session.Cookie
+            };
+
+
+            // Permission error is not thrown, just a 404
+            // {"error": 404}
+
+            throw new NotImplementedException();
+        }
+
+        public static PostListing GetSpam(Session session, string sub)
+        {
+            var request = new Request
+            {
+                Url = "http://www.reddit.com/r/" + sub + "/about/spam/.json",
+                Method = "GET",
+                Cookie = session.Cookie
+            };
+
+            throw new NotImplementedException();
+        }
+
+        public static LogListing GetModerationLog(Session session, string sub)
+        {
+
+            var request = new Request
+            {
+                Url = "http://www.reddit.com/r/" + sub + "/about/log/.json",
+                Method = "GET",
+                Cookie = session.Cookie
+            };
+
+            throw new NotImplementedException();
+        }
+
+        public static UserListing GetBannedUsers(Session session, string sub)
+        {
+            var request = new Request
+            {
+                Url = "http://www.reddit.com/r/" + sub + "/about/banned/.json",
+                Method = "GET",
+                Cookie = session.Cookie
+            };
+
+            throw new NotImplementedException();
         }
 
         /// <summary>

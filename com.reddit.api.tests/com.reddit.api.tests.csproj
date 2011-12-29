@@ -48,6 +48,7 @@
     <Compile Include="Comment.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="Flair.cs" />
+    <Compile Include="Friend.cs" />
     <Compile Include="FrontPage.cs" />
     <Compile Include="Info.cs" />
     <Compile Include="Message.cs" />

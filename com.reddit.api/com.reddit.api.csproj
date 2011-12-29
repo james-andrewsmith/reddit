@@ -53,8 +53,11 @@
     <Compile Include="Extension.cs" />
     <Compile Include="Flair.cs" />
     <Compile Include="FlairListing.cs" />
+    <Compile Include="Friend.cs" />
     <Compile Include="FrontPage.cs" />
     <Compile Include="Info.cs" />
+    <Compile Include="Log.cs" />
+    <Compile Include="LogListing.cs" />
     <Compile Include="Media.cs" />
     <Compile Include="MediaEmbed.cs" />
     <Compile Include="Message.cs" />
@@ -75,6 +78,7 @@
     <Compile Include="ThingType.cs" />
     <Compile Include="User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UserListing.cs" />
     <Compile Include="UserSortBy.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
