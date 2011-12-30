@@ -19,4 +19,7 @@ file with the following keys setup.
 
 ```
 
+To ensure all unit tests work correctly, ensure the username/password provided is a modorator on the 'moderated-subreddit',
+and this subreddit has at least 1 post, and has at least 1 flair user configured.
+
 To understand the API more have a look at https://github.com/reddit/reddit/wiki/API.
