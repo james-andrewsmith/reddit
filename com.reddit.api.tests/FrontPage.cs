@@ -22,10 +22,5 @@ namespace com.reddit.api.tests
             Assert.IsTrue(posts.Count > 0);
         }
 
-        [TestMethod]
-        public void ListFrontPageStories_NotLoggedIn()
-        {
-            Assert.Fail("Not yet implemented");
-        }
     }
 }

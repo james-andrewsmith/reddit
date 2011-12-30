@@ -36,7 +36,7 @@ namespace com.reddit.api.tests
             User.Logout(session);
 
             // attempt to get user saved posts (should result in an error)
-            User.GetSaved(session); 
+            var posts = User.GetSaved(session); 
         }
 
         [TestMethod]

@@ -19,13 +19,7 @@ namespace com.reddit.api.tests
             Assert.IsNotNull(friends);
             Assert.IsTrue(friends.Count > 0, "No friends in list, ensure you have at least one reddit friend. If so, something went wrong with the friend list request");
         }
-
-        [TestMethod]
-        public void ListFriends_NotLoggedIn()
-        {
-            Assert.Fail();
-        }
-
+        
         [TestMethod]
         public void Add_Remove()
         {
@@ -35,12 +29,14 @@ namespace com.reddit.api.tests
         [TestMethod]
         public void ListFriendPosts()
         {
+            // http://www.reddit.com/r/friends/
             Assert.Fail();
         }
 
         [TestMethod]
         public void ListFriendComments()
         {
+            // http://www.reddit.com/r/friends/comments/
             Assert.Fail();
         }
     }

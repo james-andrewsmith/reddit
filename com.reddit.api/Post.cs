@@ -199,17 +199,7 @@ namespace com.reddit.api
 
         #endregion 
 
-        #region // Conversion //
-
-        internal static PostListing FromJsonList(JToken children)
-        {
-            var list = new PostListing();
-
-            foreach (var child in children.Children().Select(post => post["data"]))            
-                list.Add(FromJson(child));
-
-            return list;
-        }
+        #region // Conversion //        
 
         internal static Post FromJson(JToken data)
         {
@@ -351,6 +341,13 @@ namespace com.reddit.api
             if (request.Execute(out json) != System.Net.HttpStatusCode.OK)
                 throw new Exception(json);
 
+            var o = JObject.Parse(json);
+
+            // Capcha
+            // o["jquery"][10][3].ToString()
+
+            // Error Message
+            // o["jquery"][12][3].ToString()
         }
 
         /// <summary>
@@ -415,6 +412,16 @@ namespace com.reddit.api
         {
 
             Thing.VoteNull(session, id, modhash);
+        }
+
+        public static void Nsfw(Session session, string id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static void UnNsfw(Session session, string id)
+        {
+            throw new NotImplementedException();
         }
 
         #endregion

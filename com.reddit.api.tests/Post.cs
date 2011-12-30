@@ -41,7 +41,7 @@ namespace com.reddit.api.tests
             };
 
             // attempt to save
-            Post.Submit(session, post, PostKind.Link);
+            Post.Submit(session, post, PostKind.Self);
         }
 
         [TestMethod]
@@ -141,6 +141,38 @@ namespace com.reddit.api.tests
 
             Post.UnSave(session, id, list.ModHash);
            
+        }
+
+
+        [TestMethod]
+        public void Nsfw_Mark_Unmark()
+        {
+            // login
+            var session = User.Login(Configuration.GetKey("username"), Configuration.GetKey("password"));
+
+            // get a popular sub
+            var list = Sub.GetListing(session, "pics");
+
+            // no modhash
+            if (string.IsNullOrEmpty(list.ModHash))
+                Assert.Fail();
+
+            // no posts
+            if (list.Count == 0)
+                Assert.Fail();
+
+            // find the first story with no votes either way
+            var id = string.Empty;
+            foreach (var post in list)
+            {
+                id = post.ID;
+                break;
+            }
+
+            Post.Nsfw(session, id);
+
+            Post.UnNsfw(session, id);
+
         }
 
         // Not testing this because we don't want to report anyone!

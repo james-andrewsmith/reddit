@@ -246,13 +246,7 @@ namespace com.reddit.api
                 throw new Exception(json);
 
             var o = JObject.Parse(json);
-
-            // convert to a post listing
-            var list = Post.FromJsonList(o["data"]["children"]);
-            list.ModHash = o["data"]["modhash"].ToString(); 
-            list.Before = o["data"]["before"].ToString();
-            list.After = o["data"]["after"].ToString();            
-            return list;
+            return PostListing.FromJson(o);
 
         }
 

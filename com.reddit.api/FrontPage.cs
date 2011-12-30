@@ -30,15 +30,10 @@ namespace com.reddit.api
             var json = string.Empty;
             if (request.Execute(out json) != System.Net.HttpStatusCode.OK)
                 throw new Exception(json);
-
-            var o = JObject.Parse(json);
-
+            
             // convert to a post listing
-            var list = Post.FromJsonList(o["data"]["children"]);
-            list.ModHash = o["data"]["modhash"].ToString(); 
-            list.Before = o["data"]["before"].ToString();
-            list.After = o["data"]["after"].ToString();
-            return list;
+            var o = JObject.Parse(json);
+            return PostListing.FromJson(o);
         }
 
     }

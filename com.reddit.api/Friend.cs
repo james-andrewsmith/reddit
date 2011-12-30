@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Serialization;
+
 namespace com.reddit.api
 {
     public sealed class Friend
@@ -20,7 +24,13 @@ namespace com.reddit.api
                 Cookie = session.Cookie
             };
 
-            throw new NotImplementedException();
+            var json = string.Empty;
+            if (request.Execute(out json) != System.Net.HttpStatusCode.OK)
+                throw new Exception(json);
+            
+            var o = JObject.Parse(json);
+            var list = UserListing.FromJson(o);
+            return list;
         }
 
         public static void Add()

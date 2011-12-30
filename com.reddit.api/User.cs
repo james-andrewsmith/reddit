@@ -116,6 +116,15 @@ namespace com.reddit.api
 
         #endregion
 
+        public static User FromJson(JToken token)
+        {
+            return new User
+            {
+                ID = token["id"].ToString(),
+                Name = token["name"].ToString()
+            };
+        }
+
         public static Session Login(string username, string password)
         {
             var request = new Request
@@ -162,7 +171,16 @@ namespace com.reddit.api
 
         public static void Logout(Session session)
         {
+            var request = new Request
+            {
+                Url = "http://www.reddit.com/logout?uh=" + session.ModHash,
+                Method = "GET",
+                Cookie = session.Cookie
+            };
             
+            var json = string.Empty;
+            if (request.Execute(out json) != System.Net.HttpStatusCode.OK)
+                throw new RedditException(json);           
         }
 
         #region // Get Saved //
@@ -192,12 +210,7 @@ namespace com.reddit.api
                 throw new Exception(json);
 
             var o = JObject.Parse(json);
-
-            // convert to a post listing
-            var list = Post.FromJsonList(o["data"]["children"]);
-            list.Before = o["data"]["before"].ToString();
-            list.After = o["data"]["after"].ToString();
-            return list;
+            return PostListing.FromJson(o);
         }
         #endregion
 
