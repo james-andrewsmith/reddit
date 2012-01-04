@@ -35,6 +35,19 @@ namespace com.reddit.api.tests
         }
 
         /// <summary>
+        /// Get the currently moderated subreddits
+        /// </summary>
+        [TestMethod]
+        public void GetMineModerated()
+        {
+            var session = User.Login(Configuration.GetKey("username"), Configuration.GetKey("password"));
+            var subs = Sub.GetMineModerated(session);
+
+            Assert.IsNotNull(subs);
+            Assert.IsTrue(subs.Count > 0);
+        }
+
+        /// <summary>
         /// This is a pretty popular reddit to use.
         /// </summary>
         private const string SubRedditToTestWith = "pics";
@@ -44,7 +57,7 @@ namespace com.reddit.api.tests
         public void GetModerators()
         {
             var session = User.Login(Configuration.GetKey("username"), Configuration.GetKey("password"));
-            var users = Sub.GetModerators(session, SubRedditToTestWith);
+            var users = Sub.GetModerators(session, SubRedditToTestModWith);
 
             Assert.IsNotNull(users);
             Assert.IsTrue(users.Count > 0);
@@ -55,7 +68,7 @@ namespace com.reddit.api.tests
         public void GetContributors()
         {
             var session = User.Login(Configuration.GetKey("username"), Configuration.GetKey("password"));
-            var users = Sub.GetContributors(session, SubRedditToTestWith);
+            var users = Sub.GetContributors(session, SubRedditToTestModWith);
 
             Assert.IsNotNull(users);
             Assert.IsTrue(users.Count > 0);

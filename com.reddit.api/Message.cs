@@ -13,29 +13,146 @@ namespace com.reddit.api
     public sealed class Message
     {
 
+        #region // Constructor //
+
+        #endregion
+
         #region // Properties //
 
-        public string To
-        {
-            get;
-            set;
-        }
-
-        public string Subject
-        {
-            get;
-            set;
-        }
-
+        [JsonProperty("body")]
         public string Body
         {
             get;
             set;
-        }         
+        }
+
+        [JsonProperty("was_comment")]
+        public bool WasComment
+        {
+            get;
+            set;
+        }
+
+        [JsonProperty("first_message")]
+        public object FirstMessage
+        {
+            get;
+            set;
+        }
+
+        [JsonProperty("name")]
+        public string Name
+        {
+            get;
+            set;
+        }
+
+        [JsonProperty("created")]
+        public DateTime Created
+        {
+            get;
+            set;
+        }
+
+        [JsonProperty("dest")]
+        public string Destination
+        {
+            get;
+            set;
+        }
+
+        [JsonProperty("author")]
+        public string Author
+        {
+            get;
+            set;
+        }
+
+        [JsonProperty("created_utc")]
+        public DateTime CreatedUtc
+        {
+            get;
+            set;
+        }
+
+        [JsonProperty("body_html")]
+        public string BodyHtml
+        {
+            get;
+            set;
+        }
+
+        [JsonProperty("subreddit")]
+        public string SubReddit
+        {
+            get;
+            set;
+        }
+
+
+        [JsonProperty("parent_id")]
+        public string ParentID
+        {
+            get;
+            set;
+        }
+
+        [JsonProperty("context")]
+        public string Context
+        {
+            get;
+            set;
+        }
+
+        [JsonProperty("replies")]
+        public string Replies
+        {
+            get;
+            set;
+        }
+
+        [JsonProperty("new")]
+        public bool New
+        {
+            get;
+            set;
+        }
+
+        [JsonProperty("id")]
+        public string ID
+        {
+            get;
+            set;
+        }
+
+        [JsonProperty("subject")]
+        public string Subject
+        {
+            get;
+            set;
+        }      
 
         #endregion 
 
         #region // Data Access //
+
+        public static void Read(Session session, params string[] id)
+        {
+            var request = new Request
+            {
+                Url = "http://www.reddit.com/api/read_message",
+                Method = "POST",
+                Cookie = session.Cookie,
+                Content = "id=" + string.Join(",", id) + "&uh=" + session.ModHash
+            };
+
+            var json = string.Empty;
+            if (request.Execute(out json) != System.Net.HttpStatusCode.OK)
+                throw new RedditException(json);
+            
+            var o = JObject.Parse(json);
+
+        }
 
         public static MessageListing Unread(Session session)
         {
@@ -51,7 +168,8 @@ namespace com.reddit.api
             if (request.Execute(out json) != System.Net.HttpStatusCode.OK)
                 throw new Exception(json);
 
-            return JsonConvert.DeserializeObject<MessageListing>(json);
+            var o = JObject.Parse(json);
+            return MessageListing.FromJson(o);
         }
 
         public static MessageListing Sent(Session session)
@@ -67,6 +185,9 @@ namespace com.reddit.api
             if (request.Execute(out json) != System.Net.HttpStatusCode.OK)
                 throw new Exception(json);
 
+            var o = JObject.Parse(json);
+            var list = MessageListing.FromJson(o);
+
             return JsonConvert.DeserializeObject<MessageListing>(json);
         }
 
@@ -78,7 +199,7 @@ namespace com.reddit.api
                 Method = "POST",
                 Cookie = session.Cookie,
                 Content = "uh=" + session.ModHash + 
-                          "&to=" + message.To + 
+                          "&to=" + message.Destination + 
                           "&subject=" + message.Subject +
                           "&thing_id=" +
                           "&text=" + message.Body + 
@@ -163,6 +284,19 @@ namespace com.reddit.api
             
             iden = client.Select("#compose-message input[name=iden]").Val();
             captcha = client.Select("#compose-message img.capimage").Attr("src");
+        }
+
+        #endregion 
+
+        #region // Conversion // 
+
+
+        internal static Message FromJson(JToken token)
+        {
+            return new Message
+            {
+
+            };            
         }
 
         #endregion 

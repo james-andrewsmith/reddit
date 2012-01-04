@@ -36,7 +36,9 @@ namespace com.reddit.api.tests
             User.Logout(session);
 
             // attempt to get user saved posts (should result in an error)
-            var posts = User.GetSaved(session); 
+            var posts = User.GetSaved(session);
+            if (posts.Count > 0)
+                Assert.Fail("Getting saved posts should of resulted in an exception, we have not logged out.");
         }
 
         [TestMethod]

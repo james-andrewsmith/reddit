@@ -13,14 +13,48 @@ namespace com.reddit.api.tests
         [TestMethod]
         public void GetUnread()
         {
-            Assert.Fail();
+            // login using regular creds
+            var session = User.Login(Configuration.GetKey("username"), Configuration.GetKey("password"));
+            var messages = Message.Unread(session);
+
+            Assert.IsNotNull(messages);
+            Assert.IsTrue(messages.Count > 0);
         }
 
         [TestMethod]
         public void GetSent()
         {
-            Assert.Fail();
+            // login using regular creds
+            var session = User.Login(Configuration.GetKey("username"), Configuration.GetKey("password"));
+            var messages = Message.Sent(session);
+
+            Assert.IsNotNull(messages);
+            Assert.IsTrue(messages.Count > 0);
         }
+
+        [TestMethod]
+        public void MakeAsRead()
+        {
+            // login using regular creds
+            var session = User.Login(Configuration.GetKey("username"), Configuration.GetKey("password"));
+            
+            // get unread messages
+            var unread = Message.Unread(session);
+            
+            // check if there are any unread messages
+            if (unread.Count == 0)
+                Assert.Fail("There are no unread messages so there is no way for us to test if we can mark messages as read");
+
+            // mark the first one as unread
+            Message.Read(session, unread[0].ID);
+            
+            // check we have less unread messages
+            var unread2 = Message.Unread(session);
+
+            // make sure there are less menus
+            Assert.IsTrue(unread.Count > unread2.Count);
+        }
+
 
         [TestMethod]
         public void GetSendForm()
@@ -50,7 +84,7 @@ namespace com.reddit.api.tests
 
             var message = new Message
             {
-                To = "pressf12",
+                Destination = "pressf12",
                 Subject = "Unit Test",
                 Body = "Send from C# Client"
             };

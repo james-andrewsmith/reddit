@@ -135,6 +135,46 @@ namespace com.reddit.api
             return list;
         }
 
+        public static List<Sub> GetMineModerated(Session session)
+        {
+            var list = new List<Sub>();
+            var request = new Request
+            {
+                Url = "http://www.reddit.com/reddits/mine/moderator.json",
+                Method = "GET",
+                Cookie = session.Cookie
+            };
+
+            var json = string.Empty;
+            if (request.Execute(out json) != System.Net.HttpStatusCode.OK)
+            {
+                // oops.
+                throw new Exception(json);
+            }
+
+            var o = JObject.Parse(json);
+
+            foreach (var sub in o["data"]["children"].Children()
+                                                     .Select(sub => sub["data"]))
+            {
+                list.Add(new Sub
+                {
+                    DisplayName = sub["display_name"].ToString(),
+                    Name = sub["name"].ToString(),
+                    Title = sub["title"].ToString(),
+                    Url = sub["url"].ToString(),
+                    Created = Convert.ToInt32(sub["created"].ToString()).ToDateTime(),
+                    CreatedUtc = Convert.ToInt32(sub["created_utc"].ToString()).ToDateTime(),
+                    Over18 = Convert.ToBoolean(sub["over18"].ToString()),
+                    Subscribers = Convert.ToInt32(sub["subscribers"].ToString()),
+                    ID = sub["id"].ToString(),
+                    Description = sub["description"].ToString()
+                });
+            }
+
+            return list;
+        }
+
         private const int Limit = 100;
 
         public static PostListing GetListing(Session session, string sub)
@@ -252,12 +292,38 @@ namespace com.reddit.api
 
         public static UserListing GetModerators(Session session, string sub)
         {
-            throw new NotImplementedException();
+            // 
+
+            var request = new Request
+            {
+                Method = "GET",
+                Cookie = session.Cookie,
+                Url = "http://www.reddit.com/r/" + sub + "/about/moderators.json"
+            };
+
+            var json = string.Empty;
+            if (request.Execute(out json) != System.Net.HttpStatusCode.OK)
+                throw new Exception(json);
+
+            var o = JObject.Parse(json);
+            return UserListing.FromJson(o);            
         }
 
         public static UserListing GetContributors(Session session, string sub)
         {
-            throw new NotImplementedException();
+            var request = new Request
+            {
+                Method = "GET",
+                Cookie = session.Cookie,
+                Url = "http://www.reddit.com/r/" + sub + "/about/contributors.json"
+            };
+
+            var json = string.Empty;
+            if (request.Execute(out json) != System.Net.HttpStatusCode.OK)
+                throw new RedditException(json);
+
+            var o = JObject.Parse(json);
+            return UserListing.FromJson(o);  
         }
 
         public static PostListing GetReportedPosts(Session session, string sub)
@@ -271,7 +337,12 @@ namespace com.reddit.api
                 Cookie = session.Cookie
             };
 
-            throw new NotImplementedException();
+            var json = string.Empty;
+            if (request.Execute(out json) != System.Net.HttpStatusCode.OK)
+                throw new Exception(json);
+
+            var o = JObject.Parse(json);
+            return PostListing.FromJson(o);
         }
 
         public static void GetTrafficStats(Session session, string sub)
@@ -300,7 +371,12 @@ namespace com.reddit.api
                 Cookie = session.Cookie
             };
 
-            throw new NotImplementedException();
+            var json = string.Empty;
+            if (request.Execute(out json) != System.Net.HttpStatusCode.OK)
+                throw new RedditException(json);
+
+            var o = JObject.Parse(json);
+            return PostListing.FromJson(o);
         }
 
         public static LogListing GetModerationLog(Session session, string sub)
@@ -313,7 +389,12 @@ namespace com.reddit.api
                 Cookie = session.Cookie
             };
 
-            throw new NotImplementedException();
+            var json = string.Empty;
+            if (request.Execute(out json) != System.Net.HttpStatusCode.OK)
+                throw new RedditException(json);
+
+            var o = JObject.Parse(json);
+            return LogListing.FromJson(o);
         }
 
         public static UserListing GetBannedUsers(Session session, string sub)
@@ -325,7 +406,12 @@ namespace com.reddit.api
                 Cookie = session.Cookie
             };
 
-            throw new NotImplementedException();
+            var json = string.Empty;
+            if (request.Execute(out json) != System.Net.HttpStatusCode.OK)
+                throw new RedditException(json);
+
+            var o = JObject.Parse(json);
+            return UserListing.FromJson(o);
         }
 
         /// <summary>
@@ -339,6 +425,42 @@ namespace com.reddit.api
             // http://www.reddit.com/reddits/search.json?q=cats
             throw new NotImplementedException();
 
+        }
+
+        public static void Create(Session session, Sub sub)
+        {
+            var subreddit_type = "public";
+            var language = "en";
+            var content_options = "any";
+            var over_18 = false;
+            var default_set = true;
+            var show_media = false;
+            var domain = "";
+
+            var request = new Request
+            {
+                Url = "",                
+                Method = "POST", 
+                Cookie = session.Cookie,
+                Content = "name=" + sub.Name +
+                          "&title=" + sub.Title +
+                          "&description=" + sub.Description +
+                          "&lang=" + language +
+                          "&type=" + subreddit_type + 
+                          "&link_type=" + content_options + 
+                          "&over_18=" + (over_18 ? "on" : "off") + 
+                          "&allow_top=" + (default_set ? "on" : "off") + 
+                          "&show_media=" + (show_media ? "on" : "off") + 
+                          "&domain=" + domain + 
+                          "&uh=" + session.ModHash + 
+                          "&id=#sr-form&api_type=json"
+            };
+
+            var json = string.Empty;
+            if (request.Execute(out json) != System.Net.HttpStatusCode.OK)
+                throw new Exception(json);
+
+            var o = JObject.Parse(json);
         }
 
     }

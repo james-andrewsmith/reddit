@@ -174,8 +174,9 @@ namespace com.reddit.api
             var request = new Request
             {
                 Url = "http://www.reddit.com/logout?uh=" + session.ModHash,
-                Method = "GET",
-                Cookie = session.Cookie
+                Method = "POST",
+                Cookie = session.Cookie,
+                Content = "uh=" + session.ModHash + "&top=off"
             };
             
             var json = string.Empty;
