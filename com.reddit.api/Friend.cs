@@ -42,5 +42,39 @@ namespace com.reddit.api
         {
 
         }
+
+        public static PostListing GetPosts(Session session)
+        {            
+            var request = new Request
+            {
+                Url = "http://www.reddit.com/r/friends/.json",
+                Method = "GET",
+                Cookie = session.Cookie
+            };
+
+            var json = string.Empty;
+            if (request.Execute(out json) != System.Net.HttpStatusCode.OK)
+                throw new RedditException(json);
+
+            var o = JObject.Parse(json);
+            return PostListing.FromJson(o);            
+        }
+
+        public static CommentListing GetComments(Session session)
+        {
+            var request = new Request
+            {
+                Url = "http://www.reddit.com/r/friends/comments/.json",
+                Method = "GET",
+                Cookie = session.Cookie
+            };
+
+            var json = string.Empty;
+            if (request.Execute(out json) != System.Net.HttpStatusCode.OK)
+                throw new RedditException(json);
+
+            var o = JObject.Parse(json);
+            return CommentListing.FromJson(o);         
+        }
     }
 }

@@ -10,15 +10,16 @@ namespace com.reddit.api.tests
     public class SearchTestClass
     {
         [TestMethod]
-        public void Search()
+        public void BasicSearchQuery()
         {
             // login using regular creds
             var session = User.Login(Configuration.GetKey("username"), Configuration.GetKey("password"));
 
             // all logic is within the search query really...
-            
 
-            Assert.Fail();
+            var posts = Search.Query(session, "IAMA");
+            Assert.IsNotNull(posts);
+            Assert.IsTrue(posts.Count > 0);
         }
     }
 }

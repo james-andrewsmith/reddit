@@ -184,8 +184,9 @@ namespace com.reddit.api.tests
         public void GetTrafficStats()
         {
             var session = User.Login(Configuration.GetKey("username"), Configuration.GetKey("password"));
-            Sub.GetTrafficStats(session, SubRedditToTestModWith);
-            Assert.Fail();
+            var traffic = Sub.GetTrafficStats(session, SubRedditToTestModWith);
+            Assert.IsNotNull(traffic);
+            Assert.IsTrue(traffic.Count > 0);
         }
 
         [TestMethod]
@@ -193,7 +194,8 @@ namespace com.reddit.api.tests
         {
             var session = User.Login(Configuration.GetKey("username"), Configuration.GetKey("password"));
             var posts = Sub.GetSpam(session, SubRedditToTestModWith);
-            Assert.Fail();
+            Assert.IsNotNull(posts);
+            Assert.IsTrue(posts.Count > 0);
         }
 
         [TestMethod]
@@ -201,7 +203,8 @@ namespace com.reddit.api.tests
         {
             var session = User.Login(Configuration.GetKey("username"), Configuration.GetKey("password"));
             var log = Sub.GetModerationLog(session, SubRedditToTestModWith);
-            Assert.Fail();
+            Assert.IsNotNull(log);
+            Assert.IsTrue(log.Count > 0);
         }
         
         [TestMethod]
@@ -209,7 +212,8 @@ namespace com.reddit.api.tests
         {            
             var session = User.Login(Configuration.GetKey("username"), Configuration.GetKey("password"));
             var users = Sub.GetBannedUsers(session, SubRedditToTestModWith);
-            Assert.Fail();
+            Assert.IsNotNull(users);
+            Assert.IsTrue(users.Count > 0);
         }
 
         [TestMethod]

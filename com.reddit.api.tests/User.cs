@@ -46,8 +46,8 @@ namespace com.reddit.api.tests
         {
             // login using regular creds
             var session = User.Login(Configuration.GetKey("username"), Configuration.GetKey("password"));
-
             var posts = User.GetSaved(session);
+            Assert.IsNotNull(posts);
             Assert.IsTrue(posts.Count > 0);
         }
 
@@ -57,8 +57,10 @@ namespace com.reddit.api.tests
             // login using regular creds
             var session = User.Login(Configuration.GetKey("username"), Configuration.GetKey("password"));
 
-
-            Assert.Fail();
+            PostListing submissions;
+            CommentListing comments;
+            User.GetSubmissionsAndComments(session, out submissions, out comments);
+            
         }
         
         [TestMethod]
@@ -67,20 +69,32 @@ namespace com.reddit.api.tests
             // login using regular creds
             var session = User.Login(Configuration.GetKey("username"), Configuration.GetKey("password"));
 
-
-            Assert.Fail();
+            PostListing submissions;
+            CommentListing comments;
+            User.GetSubmissionsAndComments(session, out submissions, out comments);
+            
         }
         
         [TestMethod]
         public void GetLiked()
         {
-            Assert.Fail();
+            // login using regular creds
+            var session = User.Login(Configuration.GetKey("username"), Configuration.GetKey("password"));
+            var liked = User.GetLiked(session);
+
+            Assert.IsNotNull(liked);
+            Assert.IsTrue(liked.Count > 0);
         }        
             
         [TestMethod]
         public void GetDisliked()
         {
-            Assert.Fail();
+            // login using regular creds
+            var session = User.Login(Configuration.GetKey("username"), Configuration.GetKey("password"));
+            var disliked = User.GetDisliked(session);
+
+            Assert.IsNotNull(disliked);
+            Assert.IsTrue(disliked.Count > 0);
         }
             
     }

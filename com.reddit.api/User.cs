@@ -233,11 +233,59 @@ namespace com.reddit.api
             return JsonConvert.DeserializeObject<User>(o["data"].ToString());
         }
 
-        public static void GetSubmissionsAndComments(Session session, out List<int> submissions, out List<int> comments)
+        public static void GetSubmissionsAndComments(Session session, out PostListing posts, out CommentListing comments)
         {
-            submissions = null;
+            posts = null;
             comments = null;
         }
+
+        public static PostListing GetLiked(Session session)
+        {
+            return GetLiked(session, session.Username);
+        }
+
+        public static PostListing GetLiked(Session session, string username)
+        {
+            // 
+            var request = new Request
+            {
+                Url = "http://www.reddit.com/user/" + username + "/liked/.json",
+                Method = "GET",
+                Cookie = session.Cookie
+            };
+
+            var json = string.Empty;
+            if (request.Execute(out json) != System.Net.HttpStatusCode.OK)
+                throw new RedditException(json);
+
+            var o = JObject.Parse(json);
+            return PostListing.FromJson(o);
+        }
+
+        
+        public static PostListing GetDisliked(Session session)
+        {
+            return GetDisliked(session, session.Username);
+        }
+
+        public static PostListing GetDisliked(Session session, string username)
+        {
+            // 
+            var request = new Request
+            {
+                Url = "http://www.reddit.com/user/" + username + "/disliked/.json",
+                Method = "GET",
+                Cookie = session.Cookie
+            };
+
+            var json = string.Empty;
+            if (request.Execute(out json) != System.Net.HttpStatusCode.OK)
+                throw new RedditException(json);
+
+            var o = JObject.Parse(json);
+            return PostListing.FromJson(o);
+        }
+
 
     }
 }

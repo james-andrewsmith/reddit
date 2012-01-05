@@ -29,8 +29,12 @@ namespace com.reddit.api.tests
         [TestMethod]
         public void ListFriendPosts()
         {
-            // http://www.reddit.com/r/friends/
-            Assert.Fail();
+            var session = User.Login(Configuration.GetKey("username"), Configuration.GetKey("password"));
+            var posts = Friend.GetPosts(session);
+
+            Assert.IsNotNull(posts);
+            Assert.IsTrue(posts.Count > 0);
+
         }
 
         [TestMethod]

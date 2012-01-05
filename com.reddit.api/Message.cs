@@ -183,12 +183,10 @@ namespace com.reddit.api
 
             var json = string.Empty;
             if (request.Execute(out json) != System.Net.HttpStatusCode.OK)
-                throw new Exception(json);
+                throw new RedditException(json);
 
             var o = JObject.Parse(json);
-            var list = MessageListing.FromJson(o);
-
-            return JsonConvert.DeserializeObject<MessageListing>(json);
+            return MessageListing.FromJson(o);
         }
 
         public static void Send(Session session, Message message, string iden, string captcha)

@@ -86,9 +86,22 @@ namespace com.reddit.api
         /// <param name="after"></param>
         /// <param name="before"></param>
         /// <returns></returns>
-        public static List<Sub> List(Session session, string after = "", string before = "")
+        public static SubListing List(Session session, string after = "", string before = "")
         {
-            throw new NotImplementedException();
+
+            var request = new Request
+            {
+                Url = "http://www.reddit.com/reddits/.json",
+                Method = "GET",
+                Cookie = session.Cookie
+            };
+
+            var json = string.Empty;
+            if (request.Execute(out json) != System.Net.HttpStatusCode.OK)
+                throw new RedditException(json);
+
+            var o = JObject.Parse(json);
+            return SubListing.FromJson(o);
         }
 
         /// <summary>
@@ -97,7 +110,6 @@ namespace com.reddit.api
         /// <returns></returns>
         public static List<Sub> GetMine(Session session)
         {
-            var list = new List<Sub>();
             var request = new Request
             {
                 Url = "http://www.reddit.com/reddits/mine.json",
@@ -107,37 +119,14 @@ namespace com.reddit.api
 
             var json = string.Empty;
             if (request.Execute(out json) != System.Net.HttpStatusCode.OK)
-            {
-                // oops.
-                throw new Exception(json);
-            }
-
+                throw new RedditException(json);
+            
             var o = JObject.Parse(json);
-
-            foreach (var sub in o["data"]["children"].Children()
-                                                     .Select(sub => sub["data"]))
-            {
-                list.Add(new Sub
-                {
-                    DisplayName = sub["display_name"].ToString(),
-                    Name = sub["name"].ToString(),
-                    Title = sub["title"].ToString(),
-                    Url = sub["url"].ToString(),
-                    Created = Convert.ToInt32(sub["created"].ToString()).ToDateTime(),
-                    CreatedUtc = Convert.ToInt32(sub["created_utc"].ToString()).ToDateTime(),
-                    Over18 = Convert.ToBoolean(sub["over18"].ToString()),
-                    Subscribers = Convert.ToInt32(sub["subscribers"].ToString()),
-                    ID = sub["id"].ToString(),
-                    Description = sub["description"].ToString()
-                });
-            }
-
-            return list;
+            return SubListing.FromJson(o);
         }
 
-        public static List<Sub> GetMineModerated(Session session)
+        public static SubListing GetMineModerated(Session session)
         {
-            var list = new List<Sub>();
             var request = new Request
             {
                 Url = "http://www.reddit.com/reddits/mine/moderator.json",
@@ -147,32 +136,10 @@ namespace com.reddit.api
 
             var json = string.Empty;
             if (request.Execute(out json) != System.Net.HttpStatusCode.OK)
-            {
-                // oops.
-                throw new Exception(json);
-            }
-
+                throw new RedditException(json);
+            
             var o = JObject.Parse(json);
-
-            foreach (var sub in o["data"]["children"].Children()
-                                                     .Select(sub => sub["data"]))
-            {
-                list.Add(new Sub
-                {
-                    DisplayName = sub["display_name"].ToString(),
-                    Name = sub["name"].ToString(),
-                    Title = sub["title"].ToString(),
-                    Url = sub["url"].ToString(),
-                    Created = Convert.ToInt32(sub["created"].ToString()).ToDateTime(),
-                    CreatedUtc = Convert.ToInt32(sub["created_utc"].ToString()).ToDateTime(),
-                    Over18 = Convert.ToBoolean(sub["over18"].ToString()),
-                    Subscribers = Convert.ToInt32(sub["subscribers"].ToString()),
-                    ID = sub["id"].ToString(),
-                    Description = sub["description"].ToString()
-                });
-            }
-
-            return list;
+            return SubListing.FromJson(o);
         }
 
         private const int Limit = 100;
@@ -345,7 +312,7 @@ namespace com.reddit.api
             return PostListing.FromJson(o);
         }
 
-        public static void GetTrafficStats(Session session, string sub)
+        public static TrafficListing GetTrafficStats(Session session, string sub)
         {
 
             var request = new Request
@@ -384,17 +351,18 @@ namespace com.reddit.api
 
             var request = new Request
             {
-                Url = "http://www.reddit.com/r/" + sub + "/about/log/.json",
+                Url = "http://www.reddit.com/r/" + sub + "/about/log/",
                 Method = "GET",
                 Cookie = session.Cookie
             };
 
-            var json = string.Empty;
-            if (request.Execute(out json) != System.Net.HttpStatusCode.OK)
-                throw new RedditException(json);
+            var html = string.Empty;
+            if (request.Execute(out html) != System.Net.HttpStatusCode.OK)
+                throw new RedditException(html);
 
-            var o = JObject.Parse(json);
-            return LogListing.FromJson(o);
+            // build JSON?
+            
+            return LogListing.FromHtml(html);
         }
 
         public static UserListing GetBannedUsers(Session session, string sub)
