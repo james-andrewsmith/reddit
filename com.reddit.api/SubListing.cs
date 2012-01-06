@@ -19,19 +19,7 @@ namespace com.reddit.api
             foreach (var sub in token["data"]["children"].Children()
                                                          .Select(sub => sub["data"]))
             {
-                list.Add(new Sub
-                {
-                    DisplayName = sub["display_name"].ToString(),
-                    Name = sub["name"].ToString(),
-                    Title = sub["title"].ToString(),
-                    Url = sub["url"].ToString(),
-                    Created = Convert.ToInt32(sub["created"].ToString()).ToDateTime(),
-                    CreatedUtc = Convert.ToInt32(sub["created_utc"].ToString()).ToDateTime(),
-                    Over18 = Convert.ToBoolean(sub["over18"].ToString()),
-                    Subscribers = Convert.ToInt32(sub["subscribers"].ToString()),
-                    ID = sub["id"].ToString(),
-                    Description = sub["description"].ToString()
-                });
+                list.Add(Sub.FromJson(sub));
             }
 
             return list;

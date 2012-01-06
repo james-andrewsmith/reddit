@@ -414,14 +414,169 @@ namespace com.reddit.api
             Thing.VoteNull(session, id, modhash);
         }
 
-        public static void Nsfw(Session session, string id)
+        public static void Nsfw(Session session, string sub, string id, string modhash)
         {
-            throw new NotImplementedException();
+            //  http://www.reddit.com/api/marknsfw
+            var request = new Request
+            {
+                Url = "http://www.reddit.com/api/marknsfw",
+                Method = "POST",
+                Cookie = session.Cookie,
+                Content = "id=" + id +
+                          "&executed=marked" +
+                          "&r=" + sub +
+                          "&uh=" + modhash + 
+                          "&renderstyle=html"
+            };
+
+
+            var json = string.Empty;
+            if (request.Execute(out json) != System.Net.HttpStatusCode.OK)
+                throw new RedditException(json);
+
+            var o = JObject.Parse(json);
+
         }
 
-        public static void UnNsfw(Session session, string id)
+        public static void UnNsfw(Session session, string sub, string id, string modhash)
         {
-            throw new NotImplementedException();
+
+            var request = new Request
+            {
+                Url = "http://www.reddit.com/api/unmarknsfw",
+                Method = "POST",
+                Cookie = session.Cookie,
+                Content = "id=" + id +
+                          "&executed=unmarked" +
+                          "&r=" + sub +
+                          "&uh=" + modhash +
+                          "&renderstyle=html"
+            };
+
+            var json = string.Empty;
+            if (request.Execute(out json) != System.Net.HttpStatusCode.OK)
+                throw new RedditException(json);
+
+            var o = JObject.Parse(json);
+
+        }
+
+
+        public static void Approve(Session session, string sub, string id, string modhash)
+        {
+
+            var request = new Request
+            {
+                Url = "http://www.reddit.com/api/approve",
+                Method = "POST",
+                Cookie = session.Cookie,
+                Content = "id=" + id +
+                          "&executed=approved" +
+                          "&r=" + sub +
+                          "&uh=" + modhash +
+                          "&renderstyle=html"
+            };
+
+            var json = string.Empty;
+            if (request.Execute(out json) != System.Net.HttpStatusCode.OK)
+                throw new RedditException(json);
+
+            var o = JObject.Parse(json);
+
+        }
+
+
+        public static void Remove(Session session, string sub, string id, string modhash)
+        {
+
+            var request = new Request
+            {
+                Url = "http://www.reddit.com/api/remove",
+                Method = "POST",
+                Cookie = session.Cookie,
+                Content = "id=" + id +
+                          "&executed=removed" +
+                          "&r=" + sub +
+                          "&uh=" + modhash +
+                          "&renderstyle=html"
+            };
+
+            var json = string.Empty;
+            if (request.Execute(out json) != System.Net.HttpStatusCode.OK)
+                throw new RedditException(json);
+
+            var o = JObject.Parse(json);
+
+        }
+
+
+        public static void Distinguish(Session session, string sub, string id, string modhash)
+        {
+
+            var request = new Request
+            {
+                Url = "http://www.reddit.com/api/distinguish/yes",
+                Method = "POST",
+                Cookie = session.Cookie,
+                Content = "id=" + id +
+                          "&executed=distinguishing..." +
+                          "&r=" + sub +
+                          "&uh=" + modhash +
+                          "&renderstyle=html"
+            };
+
+            var json = string.Empty;
+            if (request.Execute(out json) != System.Net.HttpStatusCode.OK)
+                throw new RedditException(json);
+
+            var o = JObject.Parse(json);
+
+        }
+
+        public static void UnDistinguish(Session session, string sub, string id, string modhash)
+        {
+
+            var request = new Request
+            {
+                Url = "http://www.reddit.com/api/distinguish/no",
+                Method = "POST",
+                Cookie = session.Cookie,
+                Content = "id=" + id +
+                          "&executed=distinguishing..." +
+                          "&r=" + sub +
+                          "&uh=" + modhash +
+                          "&renderstyle=html"
+            };
+
+            var json = string.Empty;
+            if (request.Execute(out json) != System.Net.HttpStatusCode.OK)
+                throw new RedditException(json);
+
+            var o = JObject.Parse(json);
+
+        }
+
+        public static void Delete(Session session, string sub, string id, string modhash)
+        {
+
+            var request = new Request
+            {
+                Url = "http://www.reddit.com/api/del",
+                Method = "POST",
+                Cookie = session.Cookie,
+                Content = "id=" + id +
+                          "&executed=deleted" +
+                          "&r=" + sub +
+                          "&uh=" + modhash +
+                          "&renderstyle=html"
+            };
+
+            var json = string.Empty;
+            if (request.Execute(out json) != System.Net.HttpStatusCode.OK)
+                throw new RedditException(json);
+
+            var o = JObject.Parse(json);
+
         }
 
         #endregion

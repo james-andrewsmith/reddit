@@ -33,14 +33,60 @@ namespace com.reddit.api
             return list;
         }
 
-        public static void Add()
+        public static void Add(Session session, string username, string id, string modhash)
         {
+            id = id.StartsWith("t2_") ? id : "t2_" + id;
 
+            var request = new Request
+            {
+                Url = "http://www.reddit.com/api/friend?note=",
+                Method = "POST",
+                Cookie = session.Cookie,
+                Content = "name=" + username +
+                          "&container=" + id +
+                          "&type=friend" +
+                          "&uh=" + modhash +
+                          "&renderstyle=html"
+            };
+
+            var json = string.Empty;
+            if (request.Execute(out json) != System.Net.HttpStatusCode.OK)
+                throw new RedditException(json);
+
+            var o = JObject.Parse(json);
+            // o["jquery"][20][3][0].ToString()
         }
 
-        public static void Remove()
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="session"></param>
+        /// <param name="username"></param>
+        /// <param name="id">The ID of the current user (with the prepended t2_)</param>
+        /// <param name="modhash"></param>
+        public static void Remove(Session session, string username, string id, string modhash)
         {
+            id = id.StartsWith("t2_") ? id : "t2_" + id;
 
+            // http://www.reddit.com/api/unfriend
+            var request = new Request
+            {
+                Url = "http://www.reddit.com/api/unfriend",
+                Method = "POST",
+                Cookie = session.Cookie,
+                Content = "name=" + username + 
+                          "&container=" + id +
+                          "&type=friend" + 
+                          "&uh=" + modhash + 
+                          "&renderstyle=html"
+            };
+
+            var json = string.Empty;
+            if (request.Execute(out json) != System.Net.HttpStatusCode.OK)
+                throw new RedditException(json);
+
+            var o = JObject.Parse(json);
+            
         }
 
         public static PostListing GetPosts(Session session)

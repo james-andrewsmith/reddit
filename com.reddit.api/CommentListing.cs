@@ -47,10 +47,25 @@ namespace com.reddit.api
 
         internal static CommentListing FromJson(JToken token)
         {
-            return new CommentListing
-            {
+            var list = new CommentListing();
+            list.ModHash = token["data"]["modhash"].ToString();
 
-            };
+            var comments = token["data"]["children"]; //.Select(t => t["data"]);
+            foreach (var comment in comments)
+            {
+                switch (comment["kind"].ToString())
+                {
+                    case "t1":
+                        list.Add(new Comment(comment["data"]));
+                        break;
+                    case "more":
+                        var test = comment["data"]["children"].Values().Select(t => t.ToString()).ToList();
+                        list.More.AddRange(test);
+                        break;
+                }
+            }
+
+            return list;
         }
     }
 }

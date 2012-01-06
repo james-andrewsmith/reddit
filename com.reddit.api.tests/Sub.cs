@@ -96,6 +96,27 @@ namespace com.reddit.api.tests
         }
 
         [TestMethod]
+        public void GetSubPosts_Paging_Loop()
+        {
+            var session = User.Login(Configuration.GetKey("username"), Configuration.GetKey("password"));
+            var list = new PostListing();
+            PostListing page = null;
+
+            do
+            {
+                page = Sub.GetListing(session, 
+                                      SubRedditToTestWith, 
+                                      page == null ? string.Empty : page.After);
+
+                list.AddRange(page);
+
+            } while (!string.IsNullOrEmpty(page.After));
+
+            Assert.IsNotNull(list);
+            Assert.IsTrue(list.Count > 0);
+        }
+
+        [TestMethod]
         public void GetSubPosts_Hot()
         {
             var session = User.Login(Configuration.GetKey("username"), Configuration.GetKey("password"));
@@ -207,25 +228,35 @@ namespace com.reddit.api.tests
             Assert.IsTrue(log.Count > 0);
         }
         
-        [TestMethod]
-        public void GetBannedUsers()
-        {            
-            var session = User.Login(Configuration.GetKey("username"), Configuration.GetKey("password"));
-            var users = Sub.GetBannedUsers(session, SubRedditToTestModWith);
-            Assert.IsNotNull(users);
-            Assert.IsTrue(users.Count > 0);
-        }
-
+        /// <summary>
+        /// Tests the listing, banning and unbanning of users in a subreddit
+        /// </summary>
         [TestMethod]
         public void Ban_Unban_User()
         {
-            Assert.Fail();
+            var session = User.Login(Configuration.GetKey("username"), Configuration.GetKey("password"));
+
+            var sub = Sub.Get(session, SubRedditToTestModWith);
+
+            Sub.BanUser(session, SubRedditToTestModWith, sub.Name, Configuration.GetKey("second-username"), session.ModHash);
+            var list = Sub.GetBannedUsers(session, SubRedditToTestModWith);
+
+            if (list.Where(u => u.Name == Configuration.GetKey("second-username")).Count() != 1)
+                Assert.Fail("THe user was not banned");
+
+            var user = User.Get(session, Configuration.GetKey("second-username"));
+            Sub.UnBanUser(session, SubRedditToTestModWith, sub.Name, "t2_" + user.ID, session.ModHash);
+            list = Sub.GetBannedUsers(session, SubRedditToTestModWith);
+
+            if (list.Where(u => u.Name == Configuration.GetKey("second-username")).Count() != 0)
+                Assert.Fail("The user was not unbanned");
+
         }
 
         [TestMethod]
         public void GrantFlair_DeleteFlair()
         {
-            Assert.Fail();
+            Assert.Fail("Not yet implemented");
         }
     }
 }

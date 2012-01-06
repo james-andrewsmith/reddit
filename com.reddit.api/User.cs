@@ -230,7 +230,7 @@ namespace com.reddit.api
                 throw new Exception(json);
 
             var o = JObject.Parse(json);
-            return JsonConvert.DeserializeObject<User>(o["data"].ToString());
+            return User.FromJson(o["data"]);
         }
 
         public static void GetSubmissionsAndComments(Session session, out PostListing posts, out CommentListing comments)

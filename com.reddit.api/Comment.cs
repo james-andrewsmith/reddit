@@ -45,13 +45,25 @@ namespace com.reddit.api
             if (token["replies"].HasValues)
             {
                 // set the modhash etc 
-                Replies.ModHash = token["replies"]["modhash"].ToString();
-
-                // find any 'more' recrods and attach here
-
+                Replies.ModHash = token["replies"]["data"]["modhash"].ToString();
+                
                 // recursive reply logic
-                foreach (var child in token["replies"]["children"].Children().Select(t => t["data"]))
-                    Replies.Add(new Comment(child));
+                foreach (var child in token["replies"]["data"]["children"].Children())
+                {
+                    // find any 'more' recrods and attach here
+                    switch (child["kind"].ToString())
+                    { 
+                        case "t1":
+                            Replies.Add(new Comment(child["data"]));
+                            break;
+                            
+                        case "more":
+                            var test = child["data"]["children"].Values().Select(t => t.ToString()).ToList();
+                            Replies.More.AddRange(test);
+                            break;
+                    }
+
+                }
             }
                 
         }
@@ -290,8 +302,9 @@ namespace com.reddit.api
                 throw new Exception(json);
 
             var o = JObject.Parse(json);
-            var comment = o[18][3][0][0].ToString();
-            return JsonConvert.DeserializeObject<Comment>(comment);
+            var comment = o["jquery"][18][3][0][0]["data"].ToString();
+            // really we just want to get the ID of the comment here
+            return new Comment();
         }
 
         #region // Get Comments For Post //
@@ -313,7 +326,7 @@ namespace com.reddit.api
 
         public static CommentListing GetCommentsForPost(Session session, string id, CommentSortBy sort, string more)
         {
-            var url = "";
+            var url = "http://www.reddit.com/comments/" + id + ".json";
 
             var request = new Request
             {
@@ -334,10 +347,23 @@ namespace com.reddit.api
             // o[0]
             
             // loop over the top level comments
-            var comments = o[1]["data"]["children"].Select(t => t["data"]);
             var list = new CommentListing();
+            var comments = o[1]["data"]["children"]; //.Select(t => t["data"]);
+            list.ModHash = o[1]["data"]["modhash"].ToString();
+
             foreach (var comment in comments)
-                list.Add(new Comment(comment));
+            {
+                switch(comment["kind"].ToString())
+                {
+                    case "t1":
+                        list.Add(new Comment(comment["data"]));
+                        break;
+                    case "more":
+                        var test = comment["data"]["children"].Values().Select(t => t.ToString()).ToList();
+                        list.More.AddRange(test);                        
+                        break;
+                }
+            }
 
             return list;
         }

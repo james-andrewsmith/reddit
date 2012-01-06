@@ -9,6 +9,11 @@ namespace com.reddit.api.tests
     [TestClass]
     public class PostTestClass
     {
+        /// <summary>
+        /// This is the test reddit for this SDK
+        /// </summary>
+        private string SubRedditToTestModWith = Configuration.GetKey("moderated-subreddit");
+
         [TestMethod]
         public void Submit_Link()
         {
@@ -51,15 +56,15 @@ namespace com.reddit.api.tests
             var session = User.Login(Configuration.GetKey("username"), Configuration.GetKey("password"));
 
             // get a popular sub
-            var list = Sub.GetListing(session, "pics");
+            var list = Sub.GetListing(session, SubRedditToTestModWith);
 
             // no modhash
             if (string.IsNullOrEmpty(list.ModHash))
-                Assert.Fail();
+                Assert.Fail("No modhash");
 
             // no posts
             if (list.Count == 0)
-                Assert.Fail();
+                Assert.Fail("No items to vote on");
 
             // find the first story with no votes either way
             var id = string.Empty;
@@ -151,27 +156,27 @@ namespace com.reddit.api.tests
             var session = User.Login(Configuration.GetKey("username"), Configuration.GetKey("password"));
 
             // get a popular sub
-            var list = Sub.GetListing(session, "pics");
+            var list = Sub.GetListing(session, SubRedditToTestModWith);
 
             // no modhash
             if (string.IsNullOrEmpty(list.ModHash))
-                Assert.Fail();
+                Assert.Fail("No modhash for this reddit");
 
             // no posts
             if (list.Count == 0)
-                Assert.Fail();
+                Assert.Fail("No items in subreddit");
 
             // find the first story with no votes either way
             var id = string.Empty;
             foreach (var post in list)
             {
-                id = post.ID;
+                id = post.Name;
                 break;
             }
 
-            Post.Nsfw(session, id);
+            Post.Nsfw(session, SubRedditToTestModWith, id, list.ModHash);
 
-            Post.UnNsfw(session, id);
+            Post.UnNsfw(session, SubRedditToTestModWith, id, list.ModHash);
 
         }
 

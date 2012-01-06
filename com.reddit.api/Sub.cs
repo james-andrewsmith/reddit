@@ -78,6 +78,41 @@ namespace com.reddit.api
 
         #endregion
 
+        internal static Sub FromJson(JToken token)
+        {
+            return new Sub
+            {
+                DisplayName = token["display_name"].ToString(),
+                Name = token["name"].ToString(),
+                Title = token["title"].ToString(),
+                Url = token["url"].ToString(),
+                Created = Convert.ToInt32(token["created"].ToString()).ToDateTime(),
+                CreatedUtc = Convert.ToInt32(token["created_utc"].ToString()).ToDateTime(),
+                Over18 = Convert.ToBoolean(token["over18"].ToString()),
+                Subscribers = Convert.ToInt32(token["subscribers"].ToString()),
+                ID = token["id"].ToString(),
+                Description = token["description"].ToString()
+            };
+        }
+
+        public static Sub Get(Session session, string sub)
+        {
+            // 
+            var request = new Request
+            {
+                Url = "http://www.reddit.com/r/" + sub + "/about/.json",
+                Method = "GET",
+                Cookie = session.Cookie
+            };
+
+            var json = string.Empty;
+            if (request.Execute(out json) != System.Net.HttpStatusCode.OK)
+                throw new RedditException(json);
+
+            var o = JObject.Parse(json);
+            return Sub.FromJson(o["data"]);
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -383,12 +418,12 @@ namespace com.reddit.api
         }
 
         /// <summary>
-        /// A search limited to a specific sub reddit
+        /// Search for a subreddit based on it's title and description
         /// </summary>
         /// <param name="session"></param>
         /// <param name="query"></param>
         /// <returns></returns>
-        public static List<Sub> Search(Session session, string subID, string query)
+        public static SubListing Search(Session session, string subID, string query)
         {
             // http://www.reddit.com/reddits/search.json?q=cats
             throw new NotImplementedException();
@@ -426,7 +461,54 @@ namespace com.reddit.api
 
             var json = string.Empty;
             if (request.Execute(out json) != System.Net.HttpStatusCode.OK)
-                throw new Exception(json);
+                throw new RedditException(json);
+
+            var o = JObject.Parse(json);
+        }
+
+        public static void BanUser(Session session, string sub, string sub_id, string username, string modhash)
+        {
+            var request = new Request
+            {
+                Url = "http://www.reddit.com/api/friend",
+                Method = "POST",
+                Cookie = session.Cookie,
+                Content = "action=add" + 
+                          "&container=" + sub_id + 
+                          "&type=banned" +
+                          "&name=" + username +
+                          "&id=#banned" + 
+                          "&r=" + sub + 
+                          "&uh=" + modhash +
+                          "&renderstyle=html"
+            };
+
+            var json = string.Empty;
+            if (request.Execute(out json) != System.Net.HttpStatusCode.OK)
+                throw new RedditException(json);
+
+            var o = JObject.Parse(json);
+        }
+
+        public static void UnBanUser(Session session, string sub, string sub_id, string user_id, string modhash)
+        {
+            var request = new Request
+            {
+                Url = "http://www.reddit.com/api/unfriend",
+                Method = "POST",
+                Cookie = session.Cookie,
+                Content = "id=" + user_id + 
+                          "&executed=removed" + 
+                          "&container=" + sub_id +
+                          "&type=banned" + 
+                          "&r=" + sub + 
+                          "&uh=" + modhash + 
+                          "&renderstyle=html"
+            };
+
+            var json = string.Empty;
+            if (request.Execute(out json) != System.Net.HttpStatusCode.OK)
+                throw new RedditException(json);
 
             var o = JObject.Parse(json);
         }
