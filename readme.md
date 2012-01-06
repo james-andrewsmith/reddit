@@ -1,7 +1,17 @@
 REDDIT C# API
 =================
 
-This API is a client for http://www.reddit.com
+This is a library to interact with www.reddit.com (or any other website which uses reddit - as it's open source), 
+from any Mono (coming soon) or  C# / .NET
+
+Requirements:
+- .NET 4.0 / VS2010
+- NSOUP, as we parse HTML in some place
+- Newtonsoft JSON.NET
+
+To get started:
+- Look at the wiki for this repository  
+- If you prefer to dive into code, checkout the com.reddit.api.tests project
 
 To get started -- have a look at the unit tests in com.reddit.tests, make sure you create an app.config 
 file with the following keys setup.
@@ -30,3 +40,22 @@ both users be user exclusively for testing unless you're very familar with what 
 tests do.
 
 To understand the API more have a look at https://github.com/reddit/reddit/wiki/API.
+
+
+
+Copyright & License
+---------------------
+
+Copyright 2011 PressF12 Pty Ltd
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this work except in compliance with the License.
+You may obtain a copy of the License in the LICENSE file, or at:
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
