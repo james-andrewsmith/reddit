@@ -2,19 +2,19 @@ REDDIT C# API
 =================
 
 This is a library to interact with www.reddit.com (or any other website which uses reddit - as it's open source), 
-from any Mono (coming soon) or  C# / .NET
+from any Mono (coming soon) or  C# / .NET application.  
 
-Requirements:
-- .NET 4.0 / VS2010
-- NSOUP, as we parse HTML in some place
-- Newtonsoft JSON.NET
+Current Requirements:  
+- .NET 4.0 / VS2010  
+- NSOUP, as we parse HTML in some place  
+- Newtonsoft JSON.NET  
 
-To get started:
+To get started:  
 - Look at the wiki for this repository  
-- If you prefer to dive into code, checkout the com.reddit.api.tests project
-
+- If you prefer to dive into code, checkout the com.reddit.api.tests project  
+  
 To get started -- have a look at the unit tests in com.reddit.tests, make sure you create an app.config 
-file with the following keys setup.
+file with the following keys setup.  
 
 ``` xml
 
