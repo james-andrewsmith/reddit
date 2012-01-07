@@ -1,12 +1,12 @@
 REDDIT C# API
 =================
 
-This is a library to interact with www.reddit.com (or any other website which uses reddit - as it's open source), 
+This is a library to interact with www.reddit.com (or any website which uses reddit - as it's open source), 
 from any Mono (coming soon) or  C# / .NET application.  
 
 Current Requirements:  
 - .NET 4.0 / VS2010  
-- NSOUP, as we parse HTML in some place  
+- NSOUP, as we parse HTML in some places  
 - Newtonsoft JSON.NET  
 
 To get started:  
